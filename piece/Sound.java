@@ -4,13 +4,11 @@ public abstract class Sound implements IFile {
 
     private String path;
 
-    public boolean canPlay() {
-        return false;
-    }
-
-    public void setPath(String path) {
+    public Sound(String path) {
         this.path = path;
     }
+
+    public abstract boolean canPlay();
 
     @Override
     public String getPath() {
