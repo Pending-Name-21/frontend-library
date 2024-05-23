@@ -1,4 +1,4 @@
-package piececomponent;
+package piece;
 
 public abstract class Sound implements IFile {
 

@@ -1,4 +1,4 @@
-package piececomponent;
+package piece;
 
 public class Sprite implements IFile {
 
