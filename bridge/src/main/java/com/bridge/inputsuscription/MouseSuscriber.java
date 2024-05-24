@@ -1,5 +1,3 @@
 package inputsuscription;
 
-public class MouseSuscriber extends Handler{
-    
-}
+public class MouseSuscriber extends Handler {}

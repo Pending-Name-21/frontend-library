@@ -32,5 +32,4 @@ public class Sprite implements IFile {
     public String getPath() {
         return this.path;
     }
-    
 }

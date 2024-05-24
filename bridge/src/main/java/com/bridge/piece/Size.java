@@ -1,7 +1,7 @@
 package piece;
 
 public class Size {
-    
+
     private double height;
     private double width;
 

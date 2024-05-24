@@ -1,5 +1,3 @@
 package inputsuscription;
 
-public class KeyboardSuscriber extends Handler{
-    
-}
+public class KeyboardSuscriber extends Handler {}
