@@ -8,13 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Handler {
-    protected Map<EventType, List<ISubscriber>> subscribers;
+    protected Map<EventType, List<IProcessInputSubscriber>> subscribers;
 
     public Handler() {
         this.subscribers = new HashMap<>();
     }
 
-    public void suscribe(EventType event, ISubscriber subscriber) {
+    public void suscribe(EventType event, IProcessInputSubscriber subscriber) {
         if (!subscribers.containsKey(event)) {
             subscribers.put(event, new ArrayList<>());
         }
@@ -23,7 +23,7 @@ public abstract class Handler {
 
     public void notifySubscribers(EventType eventType) {
         if (subscribers.containsKey(eventType)) {
-            for (ISubscriber subscriber : subscribers.get(eventType)) {
+            for (IProcessInputSubscriber subscriber : subscribers.get(eventType)) {
                 subscriber.notify(eventType);
             }
         } else {

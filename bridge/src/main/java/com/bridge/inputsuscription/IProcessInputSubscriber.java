@@ -1,5 +1,5 @@
 package inputsuscription;
 
-public interface ISubscriber {
+public interface IProcessInputSubscriber {
     void notify(EventType eventType);
 }
