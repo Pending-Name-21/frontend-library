@@ -1,4 +1,4 @@
-package inputsuscription;
+package com.bridge.inputsuscription;
 
 import java.util.ArrayList;
 import java.util.HashMap;
