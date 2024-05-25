@@ -1,4 +1,4 @@
-package inputsuscription;
+package com.bridge.inputsuscription;
 
 public class EventType {
     private String name;

@@ -1,4 +1,4 @@
-package piece;
+package com.bridge.piece;
 
 public class Coord {
 
