@@ -58,5 +58,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bridge-lib
-          path: build/libs/*.jar
+          path: "bridge/build/libs/bridge-*.jar"
           overwrite: true
