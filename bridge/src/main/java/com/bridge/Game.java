@@ -31,8 +31,8 @@ public class Game {
      * Runs the main game loop.
      */
     public void run() {
-        while (true) {
-            gameSettings.isGameWon();
+        while (!gameSettings.isGameOver()) {
+            processInput();
         }
     }
 }

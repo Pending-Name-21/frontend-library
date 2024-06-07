@@ -6,9 +6,9 @@ package com.bridge.gamesettings;
 public abstract class AGameSettings {
 
     /**
-     * Checks if the game is won.
+     * Checks if the game is over.
      *
-     * @return true if the game is won, false otherwise
+     * @return true if the game is over, and false if it keeps running
      */
-    public abstract boolean isGameWon();
+    public abstract boolean isGameOver();
 }
