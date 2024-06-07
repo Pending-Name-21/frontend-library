@@ -26,9 +26,11 @@ public class InputVerifier {
     }
 
     /**
-     * Native method to check input events.
+     * Checks input events and notifies subscribers.
      */
-    public native void check();
+    public void check() {
+        fetchRequiredEvents();
+    }
 
     /**
      * Fetches required events from input listeners and notifies subscribers.

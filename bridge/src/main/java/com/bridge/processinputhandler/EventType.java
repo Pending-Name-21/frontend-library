@@ -23,13 +23,4 @@ public class EventType {
     public String getName() {
         return name;
     }
-
-    /**
-     * Sets the name of the event.
-     *
-     * @param name the new name of the event
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Interface for input listeners.
+ *
+ * Implementors of this interface should provide a native implementation for the listen method
  */
 public interface InputListener {
 

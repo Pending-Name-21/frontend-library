@@ -9,12 +9,10 @@ import java.util.Arrays;
 public class MouseListener implements InputListener {
 
     /**
-     * Listens for mouse input events.
+     * Native method to listen for mouse input events.
      *
      * @return the list of mouse input events
      */
     @Override
-    public List<String> listen() {
-        return Arrays.asList("Mouse Clicked", "Mouse Moved");
-    }
+    public native List<String> listen();
 }

@@ -1,5 +1,6 @@
-package com.bridge.game;
+package com.bridge;
 
+import com.bridge.gamesettings.AGameSettings;
 import com.bridge.processinputhandler.InputVerifier;
 
 /**
@@ -7,14 +8,16 @@ import com.bridge.processinputhandler.InputVerifier;
  */
 public class Game {
     private InputVerifier inputVerifier;
+    private AGameSettings gameSettings;
 
     /**
      * Constructs a Game with the specified input verifier.
      *
      * @param inputVerifier the input verifier to use
      */
-    public Game(InputVerifier inputVerifier) {
+    public Game(InputVerifier inputVerifier, AGameSettings gameSettings) {
         this.inputVerifier = inputVerifier;
+        this.gameSettings = gameSettings;
     }
 
     /**
@@ -29,7 +32,7 @@ public class Game {
      */
     public void run() {
         while (true) {
-            processInput();
+            gameSettings.isGameWon();
         }
     }
 }
