@@ -1,7 +1,6 @@
 package com.bridge.processinputhandler;
 
 import com.bridge.processinputhandler.listeners.InputListener;
-
 import java.util.List;
 
 /**
@@ -18,9 +17,7 @@ public class InputVerifier {
      * @param inputListeners the list of input listeners
      */
     public InputVerifier(
-            ProcessInputPublisher processInputPublisher,
-            List<InputListener> inputListeners
-    ) {
+            ProcessInputPublisher processInputPublisher, List<InputListener> inputListeners) {
         this.processInputPublisher = processInputPublisher;
         this.inputListeners = inputListeners;
     }
