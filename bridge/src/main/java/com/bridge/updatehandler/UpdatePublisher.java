@@ -1,5 +1,6 @@
 package com.bridge.updatehandler;
 
+import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +29,13 @@ public class UpdatePublisher {
     /**
      * Notifies all subscribers of an update.
      */
-    public void notifySubscribers() {
-        for (IUpdateSubscriber subscriber : subscribers) {
-            subscriber.notify();
+    public void notifySubscribers() throws NotPossibleToNotifySubscribersException {
+        try {
+            for (IUpdateSubscriber subscriber : subscribers) {
+                subscriber.notifySubscriber();
+            }
+        } catch (Exception e) {
+            throw new NotPossibleToNotifySubscribersException(e.getCause());
         }
     }
 }
