@@ -32,7 +32,7 @@ public class UpdatePublisher {
     public void notifySubscribers() throws NotPossibleToNotifySubscribersException {
         try {
             for (IUpdateSubscriber subscriber : subscribers) {
-                subscriber.notify();
+                subscriber.notifySubscriber();
             }
         } catch (Exception e) {
             throw new NotPossibleToNotifySubscribersException(e.getCause());

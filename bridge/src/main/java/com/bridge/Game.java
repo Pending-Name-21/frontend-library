@@ -48,6 +48,7 @@ public class Game {
         while (!gameSettings.isGameOver()) {
             processInput();
             update();
+            Thread.yield();
         }
     }
 }
