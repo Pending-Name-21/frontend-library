@@ -66,4 +66,8 @@ public class SpriteRenderer {
             renderSprite(sprite);
         }
     }
+
+    public List<Sprite> getSprites() {
+        return sprites;
+    }
 }

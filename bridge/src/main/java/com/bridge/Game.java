@@ -53,6 +53,10 @@ public class Game {
         renderManager.playSounds();
     }
 
+    public RenderManager getRenderManager() {
+        return renderManager;
+    }
+
     /**
      * Runs the main game loop.
      */

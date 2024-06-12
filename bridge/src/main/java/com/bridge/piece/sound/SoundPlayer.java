@@ -70,4 +70,8 @@ public class SoundPlayer {
             playSound(sound);
         }
     }
+
+    public List<Sound> getSounds() {
+        return sounds;
+    }
 }

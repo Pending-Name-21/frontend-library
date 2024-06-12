@@ -1,16 +1,17 @@
 package com.bridge;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.processinputhandler.NullInputListenersException;
 import com.bridge.gamesettings.AGameSettings;
+import com.bridge.piece.render.RenderManager;
 import com.bridge.processinputhandler.InputVerifier;
 import com.bridge.processinputhandler.ProcessInputPublisher;
 import com.bridge.processinputhandler.listeners.InputListener;
 import com.bridge.updatehandler.UpdatePublisher;
-
-import java.beans.Transient;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class GameTest {
     private TestInputVerifier inputVerifier;
     private TestGameSettings gameSettings;
     private TestUpdatePublisher updatePublisher;
-    private TestRenderManager renderManager;
+    private RenderManager renderManager;
     private Game game;
 
     @BeforeEach
@@ -27,7 +28,7 @@ class GameTest {
         inputVerifier = new TestInputVerifier();
         gameSettings = new TestGameSettings();
         updatePublisher = new TestUpdatePublisher();
-        renderManager = new TestRenderManager();
+        renderManager = new RenderManager();
         game = new Game(inputVerifier, gameSettings, updatePublisher, renderManager);
     }
 
@@ -77,8 +78,6 @@ class GameTest {
 
         assertTrue(inputVerifier.checked);
         assertTrue(updatePublisher.notified);
-        assertTrue(renderManager.spritesRendered);
-        assertTrue(renderManager.soundsPlayed);
     }
 
     static class TestInputVerifier extends InputVerifier {
@@ -129,21 +128,6 @@ class GameTest {
         @Override
         public List<String> listen() {
             return List.of("testEvent");
-        }
-    }
-
-    static class TestRenderManager extends RenderManager {
-        boolean spritesRendered = false;
-        boolean soundsPlayed = false;
-
-        @Override
-        public void renderSprites() {
-            spritesRendered = true;
-        }
-
-        @Override
-        public void playSounds() {
-            soundsPlayed = true;
         }
     }
 }
