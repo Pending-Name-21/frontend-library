@@ -1,2 +1,2 @@
-rootProject.name = "fronted-library"
+rootProject.name = "frontend-library"
 include("bridge")
