@@ -1,5 +1,6 @@
 package com.bridge.renderHandler.sprite;
 
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,14 +61,18 @@ public class SpriteRenderer {
      *
      * @param sprite the sprite to render
      */
-    public native void renderSprite(Sprite sprite);
+    public native void renderSprite(Sprite sprite) throws RenderException;
 
     /**
      * Renders all sprites in the list.
      */
-    public void renderAllSprites() {
+    public void renderAllSprites() throws RenderException {
         for (Sprite sprite : sprites) {
-            renderSprite(sprite);
+            try {
+                renderSprite(sprite);
+            } catch (Exception e) {
+                throw new RenderException("Failed to render sprite: " + sprite, e);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.bridge.renderHandler.sound;
 
+import com.bridge.core.exceptions.renderHandlerExceptions.SoundException;
 import com.bridge.renderHandler.sprite.Sprite;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,10 +69,16 @@ public class SoundPlayer {
 
     /**
      * Plays all sounds in the list.
+     *
+     * @throws SoundException if there is an error playing any sound
      */
-    public void playAllSounds() {
+    public void playAllSounds() throws SoundException {
         for (Sound sound : sounds) {
-            playSound(sound);
+            try {
+                playSound(sound);
+            } catch (Exception e) {
+                throw new SoundException("Failed to play sound: " + sound, e);
+            }
         }
     }
 

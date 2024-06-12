@@ -1,5 +1,7 @@
 package com.bridge.renderHandler.render;
 
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
+import com.bridge.core.exceptions.renderHandlerExceptions.SoundException;
 import com.bridge.renderHandler.sound.SoundFactory;
 import com.bridge.renderHandler.sound.SoundPlayer;
 import com.bridge.renderHandler.sprite.SpriteFactory;
@@ -37,15 +39,27 @@ public class RenderManager {
      * Renders all sprites.
      */
     public void renderSprites() {
-        spriteRenderer.renderAllSprites();
-        spritesRendered = true;
+        try {
+            spriteRenderer.renderAllSprites();
+            spritesRendered = true;
+        } catch (RenderException e) {
+            System.err.println("Error rendering sprites: " + e.getMessage());
+            e.printStackTrace();
+            spritesRendered = false;
+        }
     }
 
     /**
      * Plays all sounds.
      */
     public void playSounds() {
-        soundPlayer.playAllSounds();
-        soundsPlayed = true;
+        try {
+            soundPlayer.playAllSounds();
+            soundsPlayed = true;
+        } catch (SoundException e) {
+            System.err.println("Error playing sounds: " + e.getMessage());
+            e.printStackTrace();
+            soundsPlayed = false;
+        }
     }
 }
