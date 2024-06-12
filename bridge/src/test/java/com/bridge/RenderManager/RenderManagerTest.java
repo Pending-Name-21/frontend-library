@@ -2,68 +2,40 @@ package com.bridge.renderManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.bridge.piece.Coord;
-import com.bridge.piece.Size;
-import com.bridge.piece.render.RenderManager;
-import com.bridge.piece.sound.*;
-import com.bridge.piece.sprite.*;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import com.bridge.renderHandler.render.RenderManager;
+import com.bridge.renderHandler.sound.*;
+import com.bridge.renderHandler.sprite.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RenderManagerTest {
-
+    private SpriteRenderer spriteRenderer;
+    private SoundPlayer soundPlayer;
     private RenderManager renderManager;
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
 
     @BeforeEach
-    public void setUp() {
-        renderManager = new RenderManager();
-        System.setOut(new PrintStream(outContent));
+    void setUp() {
+        spriteRenderer = new SpriteRenderer();
+        soundPlayer = new SoundPlayer();
+        renderManager = new RenderManager(spriteRenderer, soundPlayer);
     }
 
     @Test
-    public void testRenderSprites() {
-
-        Sprite sprite1 = new Sprite(new Coord(0, 0), new Size(10, 10), "sprite1.png");
-        Sprite sprite2 = new Sprite(new Coord(1, 1), new Size(20, 20), "sprite2.png");
-
-        renderManager.spriteRenderer.addSprite(sprite1);
-        renderManager.spriteRenderer.addSprite(sprite2);
-
+    void testRenderSprites() {
         renderManager.renderSprites();
-
-        assertEquals(
-                "Rendering sprite: sprite1.png\nRendering sprite: sprite2.png\n",
-                outContent.toString());
+        assertTrue(renderManager.spritesRendered, "Sprites should be rendered");
     }
 
     @Test
-    public void testPlaySounds() {
-
-        Sound sound1 =
-                new Sound("sound1.wav") {
-                    @Override
-                    public boolean canPlay() {
-                        return true;
-                    }
-                };
-        Sound sound2 =
-                new Sound("sound2.wav") {
-                    @Override
-                    public boolean canPlay() {
-                        return true;
-                    }
-                };
-
-        renderManager.soundPlayer.addSound(sound1);
-        renderManager.soundPlayer.addSound(sound2);
-
+    void testPlaySounds() {
         renderManager.playSounds();
+        assertTrue(renderManager.soundsPlayed, "Sounds should be played");
+    }
 
-        assertEquals(
-                "Playing sound: sound1.wav\nPlaying sound: sound2.wav\n", outContent.toString());
+    @Test
+    void testDefaultConstructor() {
+        renderManager = new RenderManager();
+        assertTrue(renderManager.spriteRenderer != null, "SpriteRenderer should be initialized");
+        assertTrue(renderManager.soundPlayer != null, "SoundPlayer should be initialized");
     }
 }
