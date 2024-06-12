@@ -12,7 +12,7 @@ public class SpriteRenderer {
 
     /**
      * Constructor that initializes the sprite list and sprite factory.
-     * 
+     *
      * @param spriteFactory the sprite factory
      */
     public SpriteRenderer(SpriteFactory spriteFactory) {
@@ -22,7 +22,7 @@ public class SpriteRenderer {
 
     /**
      * Adds a sprite to the list.
-     * 
+     *
      * @param sprite the sprite to add
      */
     public void addSprite(Sprite sprite) {
@@ -31,7 +31,7 @@ public class SpriteRenderer {
 
     /**
      * Removes a sprite from the list.
-     * 
+     *
      * @param sprite the sprite to remove
      */
     public void removeSprite(Sprite sprite) {
@@ -40,7 +40,7 @@ public class SpriteRenderer {
 
     /**
      * Updates a sprite in the list.
-     * 
+     *
      * @param sprite the current sprite
      * @param newSprite the new sprite
      */
@@ -53,7 +53,7 @@ public class SpriteRenderer {
 
     /**
      * Renders a specific sprite.
-     * 
+     *
      * @param sprite the sprite to render
      */
     public native void renderSprite(Sprite sprite);

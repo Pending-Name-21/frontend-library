@@ -1,7 +1,8 @@
 package com.bridge.piece;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 public class RenderManagerTest {
 
@@ -13,29 +14,29 @@ public class RenderManagerTest {
         renderManager.getSpriteRenderer().addSprite(sprite1);
         renderManager.getSpriteRenderer().addSprite(sprite2);
 
-       
         assertDoesNotThrow(() -> renderManager.renderSprites());
     }
 
     @Test
     public void testPlaySounds() {
         RenderManager renderManager = new RenderManager();
-        Sound sound1 = new Sound("sound1.mp3") {
-            @Override
-            public boolean canPlay() {
-                return true;
-            }
-        };
-        Sound sound2 = new Sound("sound2.mp3") {
-            @Override
-            public boolean canPlay() {
-                return true;
-            }
-        };
+        Sound sound1 =
+                new Sound("sound1.mp3") {
+                    @Override
+                    public boolean canPlay() {
+                        return true;
+                    }
+                };
+        Sound sound2 =
+                new Sound("sound2.mp3") {
+                    @Override
+                    public boolean canPlay() {
+                        return true;
+                    }
+                };
         renderManager.getSoundPlayer().addSound(sound1);
         renderManager.getSoundPlayer().addSound(sound2);
 
-        
         assertDoesNotThrow(() -> renderManager.playSounds());
     }
 }

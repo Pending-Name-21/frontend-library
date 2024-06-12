@@ -11,7 +11,7 @@ public class SoundFactory implements ISoundFactory {
         return new Sound("") {
             @Override
             public boolean canPlay() {
-                return true; 
+                return true;
             }
         };
     }

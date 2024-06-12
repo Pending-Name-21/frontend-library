@@ -9,6 +9,8 @@ import com.bridge.processinputhandler.InputVerifier;
 import com.bridge.processinputhandler.ProcessInputPublisher;
 import com.bridge.processinputhandler.listeners.InputListener;
 import com.bridge.updatehandler.UpdatePublisher;
+
+import java.beans.Transient;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ class GameTest {
     private TestInputVerifier inputVerifier;
     private TestGameSettings gameSettings;
     private TestUpdatePublisher updatePublisher;
+    private TestRenderManager renderManager;
     private Game game;
 
     @BeforeEach
@@ -24,13 +27,21 @@ class GameTest {
         inputVerifier = new TestInputVerifier();
         gameSettings = new TestGameSettings();
         updatePublisher = new TestUpdatePublisher();
-        game = new Game(inputVerifier, gameSettings, updatePublisher);
+        renderManager = new TestRenderManager();
+        game = new Game(inputVerifier, gameSettings, updatePublisher, renderManager);
     }
 
     @Test
     void testUpdate() throws GameException {
         game.update();
         assertTrue(updatePublisher.notified);
+    }
+
+    @Test
+    void testRender() {
+        game.render();
+        assertTrue(renderManager.spritesRendered);
+        assertTrue(renderManager.soundsPlayed);
     }
 
     @Test
@@ -66,6 +77,8 @@ class GameTest {
 
         assertTrue(inputVerifier.checked);
         assertTrue(updatePublisher.notified);
+        assertTrue(renderManager.spritesRendered);
+        assertTrue(renderManager.soundsPlayed);
     }
 
     static class TestInputVerifier extends InputVerifier {
@@ -116,6 +129,21 @@ class GameTest {
         @Override
         public List<String> listen() {
             return List.of("testEvent");
+        }
+    }
+
+    static class TestRenderManager extends RenderManager {
+        boolean spritesRendered = false;
+        boolean soundsPlayed = false;
+
+        @Override
+        public void renderSprites() {
+            spritesRendered = true;
+        }
+
+        @Override
+        public void playSounds() {
+            soundsPlayed = true;
         }
     }
 }

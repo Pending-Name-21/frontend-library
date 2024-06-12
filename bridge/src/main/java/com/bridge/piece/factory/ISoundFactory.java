@@ -7,9 +7,9 @@ import com.bridge.piece.sound.*;
  */
 public interface ISoundFactory {
 
-     /**
+    /**
      * Cretes a new sound.
-     * 
+     *
      * @return the sound created
      */
     Sound createSound();

@@ -11,7 +11,7 @@ public abstract class Sound implements IFile {
 
     /**
      * Constructor that initializes a sound.
-     * 
+     *
      * @param path the file path of the sound
      */
     public Sound(String path) {
@@ -20,7 +20,7 @@ public abstract class Sound implements IFile {
 
     /**
      * Abstract method to check if the sound can be played.
-     * 
+     *
      * @return true if the sound can be played, false otherwise
      */
     public abstract boolean canPlay();

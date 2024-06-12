@@ -3,10 +3,7 @@ package com.bridge;
 import com.bridge.core.exceptions.GameException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.piece.render.RenderManager;
-import com.bridge.piece.sprite.SpriteFactory;
-import com.bridge.piece.sprite.Sprite;
 import com.bridge.processinputhandler.InputVerifier;
-//import com.bridge.renderHandlerImplementation.sprite.Sprite;
 import com.bridge.updatehandler.UpdatePublisher;
 
 /**
@@ -31,7 +28,7 @@ public class Game {
         this.inputVerifier = inputVerifier;
         this.gameSettings = gameSettings;
         this.updatePublisher = updatePublisher;
-        this.renderManager =renderManager;
+        this.renderManager = renderManager;
     }
 
     /**
@@ -49,9 +46,9 @@ public class Game {
     }
 
     /**
-     * Renders sprites and plays sounds 
+     * Renders sprites and plays sounds
      */
-    public void render(){
+    public void render() {
         renderManager.renderSprites();
         renderManager.playSounds();
     }
