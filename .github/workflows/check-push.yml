@@ -1,0 +1,62 @@
+name: Develop Workflow
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Build using Gradle Wrapper
+        run: ./gradlew build --no-daemon
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Tests using Gradle Wrapper
+        run: ./gradlew test --no-daemon
+
+  upload_artifact:
+    name: Artifact
+    runs-on: ubuntu-latest
+    needs: [build, test]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Build with Gradle
+        run: ./gradlew assemble
+
+      - name: Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: bridge-lib
+          path: "bridge/build/libs/bridge-*.jar"
+          overwrite: true
