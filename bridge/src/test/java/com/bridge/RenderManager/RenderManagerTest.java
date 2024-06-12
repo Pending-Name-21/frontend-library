@@ -1,4 +1,4 @@
-package com.bridge.renderHandler;
+package com.bridge.renderManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
