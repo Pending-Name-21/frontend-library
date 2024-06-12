@@ -7,7 +7,7 @@ public interface IFile {
 
     /**
      * Gets the file path.
-     * 
+     *
      * @return the file path
      */
     public String getPath();

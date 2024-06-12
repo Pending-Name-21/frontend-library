@@ -11,7 +11,7 @@ import com.bridge.renderHandler.sprite.SpriteRenderer;
 public class RenderManager {
     public SpriteRenderer spriteRenderer;
     public SoundPlayer soundPlayer;
-    
+
     public boolean spritesRendered = false;
     public boolean soundsPlayed = false;
 
