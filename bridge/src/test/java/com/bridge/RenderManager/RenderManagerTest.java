@@ -1,8 +1,11 @@
-package com.bridge.piece;
+package com.bridge.RenderManager;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.Assert.assertEquals;
+// import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.bridge.piece.Coord;
+import com.bridge.piece.Size;
 import com.bridge.piece.render.RenderManager;
 import com.bridge.piece.sound.*;
 import com.bridge.piece.sprite.*;
