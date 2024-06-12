@@ -1,5 +1,8 @@
-package com.bridge.piece;
+package com.bridge.renderHandler;
 
+/**
+ * Size class that represents the size of a sprite.
+ */
 public class Size {
 
     private double height;

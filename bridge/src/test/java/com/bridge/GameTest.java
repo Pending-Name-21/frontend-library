@@ -1,6 +1,8 @@
 package com.bridge;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.processinputhandler.NullInputListenersException;
@@ -8,6 +10,7 @@ import com.bridge.gamesettings.AGameSettings;
 import com.bridge.processinputhandler.InputVerifier;
 import com.bridge.processinputhandler.ProcessInputPublisher;
 import com.bridge.processinputhandler.listeners.InputListener;
+import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +20,7 @@ class GameTest {
     private TestInputVerifier inputVerifier;
     private TestGameSettings gameSettings;
     private TestUpdatePublisher updatePublisher;
+    private RenderManager renderManager;
     private Game game;
 
     @BeforeEach
@@ -24,13 +28,21 @@ class GameTest {
         inputVerifier = new TestInputVerifier();
         gameSettings = new TestGameSettings();
         updatePublisher = new TestUpdatePublisher();
-        game = new Game(inputVerifier, gameSettings, updatePublisher);
+        renderManager = new RenderManager();
+        game = new Game(inputVerifier, gameSettings, updatePublisher, renderManager);
     }
 
     @Test
     void testUpdate() throws GameException {
         game.update();
         assertTrue(updatePublisher.notified);
+    }
+
+    @Test
+    void testRender() {
+        game.render();
+        assertTrue(renderManager.spritesRendered);
+        assertTrue(renderManager.soundsPlayed);
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.bridge;
 import com.bridge.core.exceptions.GameException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.processinputhandler.InputVerifier;
+import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
 
 /**
@@ -12,6 +13,7 @@ public class Game {
     private InputVerifier inputVerifier;
     private AGameSettings gameSettings;
     private UpdatePublisher updatePublisher;
+    private RenderManager renderManager;
 
     /**
      * Constructs a Game with the specified input verifier.
@@ -21,10 +23,12 @@ public class Game {
     public Game(
             InputVerifier inputVerifier,
             AGameSettings gameSettings,
-            UpdatePublisher updatePublisher) {
+            UpdatePublisher updatePublisher,
+            RenderManager renderManager) {
         this.inputVerifier = inputVerifier;
         this.gameSettings = gameSettings;
         this.updatePublisher = updatePublisher;
+        this.renderManager = renderManager;
     }
 
     /**
@@ -42,12 +46,25 @@ public class Game {
     }
 
     /**
+     * Renders sprites and plays sounds
+     */
+    public void render() {
+        renderManager.renderSprites();
+        renderManager.playSounds();
+    }
+
+    public RenderManager getRenderManager() {
+        return renderManager;
+    }
+
+    /**
      * Runs the main game loop.
      */
     public void run() throws GameException {
         while (!gameSettings.isGameOver()) {
             processInput();
             update();
+            render();
             Thread.yield();
         }
     }
