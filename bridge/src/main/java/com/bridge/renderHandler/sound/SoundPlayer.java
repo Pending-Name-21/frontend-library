@@ -1,8 +1,9 @@
-package com.bridge.piece.sound;
+package com.bridge.renderHandler.sound;
 
-import com.bridge.piece.sprite.Sprite;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bridge.renderHandler.sprite.Sprite;
 
 /**
  * SoundPlayer class that manages a collection of sounds and their playback.

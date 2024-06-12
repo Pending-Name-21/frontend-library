@@ -1,4 +1,4 @@
-package com.bridge.piece.sprite;
+package com.bridge.renderHandler.sprite;
 
 import java.util.ArrayList;
 import java.util.List;

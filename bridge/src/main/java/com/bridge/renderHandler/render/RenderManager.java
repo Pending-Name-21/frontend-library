@@ -1,9 +1,9 @@
-package com.bridge.piece.render;
+package com.bridge.renderHandler.render;
 
-import com.bridge.piece.sound.SoundFactory;
-import com.bridge.piece.sound.SoundPlayer;
-import com.bridge.piece.sprite.SpriteFactory;
-import com.bridge.piece.sprite.SpriteRenderer;
+import com.bridge.renderHandler.sound.SoundFactory;
+import com.bridge.renderHandler.sound.SoundPlayer;
+import com.bridge.renderHandler.sprite.SpriteFactory;
+import com.bridge.renderHandler.sprite.SpriteRenderer;
 
 /**
  * RenderManager class that manages the rendering of sprites and playing of sounds.
@@ -11,7 +11,7 @@ import com.bridge.piece.sprite.SpriteRenderer;
 public class RenderManager {
     public SpriteRenderer spriteRenderer;
     public SoundPlayer soundPlayer;
-
+    
     public boolean spritesRendered = false;
     public boolean soundsPlayed = false;
 

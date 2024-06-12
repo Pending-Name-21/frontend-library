@@ -1,8 +1,8 @@
-package com.bridge.piece.sprite;
+package com.bridge.renderHandler.sprite;
 
-import com.bridge.piece.Coord;
-import com.bridge.piece.Size;
-import com.bridge.piece.factory.*;
+import com.bridge.renderHandler.Coord;
+import com.bridge.renderHandler.Size;
+import com.bridge.renderHandler.factory.*;
 
 /**
  * SpriteFactory class that implements ISpriteFactory.

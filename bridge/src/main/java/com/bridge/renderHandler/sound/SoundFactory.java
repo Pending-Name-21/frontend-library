@@ -1,6 +1,6 @@
-package com.bridge.piece.sound;
+package com.bridge.renderHandler.sound;
 
-import com.bridge.piece.factory.ISoundFactory;
+import com.bridge.renderHandler.factory.ISoundFactory;
 
 /**
  * SoundFactory class that implements ISoundFactory.
@@ -11,7 +11,7 @@ public class SoundFactory implements ISoundFactory {
         return new Sound("") {
             @Override
             public boolean canPlay() {
-                return true;
+                return true; 
             }
         };
     }

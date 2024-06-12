@@ -2,8 +2,8 @@ package com.bridge;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.gamesettings.AGameSettings;
-import com.bridge.piece.render.RenderManager;
 import com.bridge.processinputhandler.InputVerifier;
+import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
 
 /**

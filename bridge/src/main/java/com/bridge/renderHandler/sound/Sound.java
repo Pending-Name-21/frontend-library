@@ -1,6 +1,6 @@
-package com.bridge.piece.sound;
+package com.bridge.renderHandler.sound;
 
-import com.bridge.piece.*;
+import com.bridge.renderHandler.*;
 
 /**
  * Abstract Sound class that represents a sound.

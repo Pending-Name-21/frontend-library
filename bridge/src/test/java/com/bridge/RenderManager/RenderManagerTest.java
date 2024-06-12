@@ -1,7 +1,5 @@
 package com.bridge.RenderManager;
 
-import static org.junit.jupiter.Assert.assertEquals;
-// import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.bridge.piece.Coord;
@@ -11,7 +9,7 @@ import com.bridge.piece.sound.*;
 import com.bridge.piece.sprite.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RenderManagerTest {
@@ -20,7 +18,7 @@ public class RenderManagerTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         renderManager = new RenderManager();
         System.setOut(new PrintStream(outContent));

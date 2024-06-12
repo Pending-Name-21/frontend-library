@@ -1,7 +1,7 @@
-package com.bridge.piece.sprite;
+package com.bridge.renderHandler.sprite;
 
-import com.bridge.piece.*;
-import com.bridge.piece.sound.*;
+import com.bridge.renderHandler.*;
+import com.bridge.renderHandler.sound.*;
 
 /**
  * Sprite class that represents a sprite with position, size and path attributes.
@@ -16,7 +16,7 @@ public class Sprite implements IFile {
 
     /**
      * Constructor that initializes a sprite.
-     *
+     * 
      * @param position the position of the sprite
      * @param size the size of the sprite
      * @param path the file path of the sprite
@@ -27,9 +27,9 @@ public class Sprite implements IFile {
         this.path = path;
     }
 
-    /**
+     /**
      * Gets the position of the sprite.
-     *
+     * 
      * @return the position of the sprite
      */
     public Coord getPosition() {
@@ -38,7 +38,7 @@ public class Sprite implements IFile {
 
     /**
      * Sets the position of the sprite.
-     *
+     * 
      * @param position the new position of the sprite
      */
     public void setPosition(Coord position) {
@@ -47,7 +47,7 @@ public class Sprite implements IFile {
 
     /**
      * Gets the size of the sprite.
-     *
+     * 
      * @return the size of the sprite
      */
     public Size getSize() {
@@ -56,7 +56,7 @@ public class Sprite implements IFile {
 
     /**
      * Sets the size of the sprite.
-     *
+     * 
      * @param size the new size of the sprite
      */
     public void setSize(Size size) {
@@ -65,7 +65,7 @@ public class Sprite implements IFile {
 
     /**
      * Checks if the sprite is hidden.
-     *
+     * 
      * @return true if the sprite is hidden, false otherwise
      */
     public boolean isHidden() {
@@ -74,7 +74,7 @@ public class Sprite implements IFile {
 
     /**
      * Sets the visibility of the sprite.
-     *
+     * 
      * @param hidden true to hide the sprite, false to show it
      */
     public void setHidden(boolean hidden) {
@@ -83,7 +83,7 @@ public class Sprite implements IFile {
 
     /**
      * Gets the sound associated with the sprite.
-     *
+     * 
      * @return the sound associated with the sprite
      */
     public Sound getSound() {
@@ -92,7 +92,7 @@ public class Sprite implements IFile {
 
     /**
      * Sets the sound associated with the sprite.
-     *
+     * 
      * @param sound the new sound associated with the sprite
      */
     public void setSound(Sound sound) {
