@@ -37,6 +37,24 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+          cache: 'gradle'
+
       - name: Run Tests using Gradle Wrapper
-        run: ./gradlew test --no-daemon
+        run: |
+          ./gradlew --no-daemon test jacocoTestReport -x assemble
+
+      - name: Publish coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: true 
+          files: ./bridge/build/reports/jacoco/test/jacocoTestReport.xml
+          name: frontend-library
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+          plugin: noop
 
