@@ -24,7 +24,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build using Gradle Wrapper
-        run: ./gradlew build --no-daemon
+        run: ./gradlew --no-daemon build -x test
 
   test:
     name: Test
