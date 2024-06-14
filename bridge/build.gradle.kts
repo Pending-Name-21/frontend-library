@@ -52,8 +52,8 @@ spotless {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            groupId = findProperty("group") as String
-            artifactId = findProperty("artifact") as String
+            groupId = "io.github.teran-joseluis"
+            artifactId = rootProject.name
             version = "0.0.0-alpha.0.2.0"
 
             from(components["java"])
@@ -80,14 +80,26 @@ publishing {
                 }
 
                 scm {
-                    url.set("https://github.com/${Meta.githubRepo}.git")
+                    url.set("https://github.com/${Meta.githubRepo}")
                     connection.set("scm:git:git://github.com/${Meta.githubRepo}.git")
-                    developerConnection.set("scm:git:git://github.com/${Meta.githubRepo}.git")
+                    developerConnection.set("scm:git:ssh://github.com/${Meta.githubRepo}.git")
                 }
 
                 issueManagement {
                     url.set("https://github.com/${Meta.githubRepo}/issues")
                 }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+
+            credentials {
+                username = providers.environmentVariable("OSSRH_USERNAME").toString()
+                password = providers.environmentVariable("OSSRH_PASSWORD").toString()
             }
         }
     }
