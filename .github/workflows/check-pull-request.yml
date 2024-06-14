@@ -51,11 +51,18 @@ jobs:
       - name: Publish coverage reports
         uses: codecov/codecov-action@v4
         with:
-          fail_ci_if_error: true 
+          fail_ci_if_error: true
           files: ./bridge/build/reports/jacoco/test/jacocoTestReport.xml
           name: frontend-library
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           codecov_yml_path: .codecov.yml
           plugin: noop
+
+      - name: Report coverage
+        uses: ogotalski/test-coverage-report@v1.4
+        with:
+          paths: ./bridge/build/reports/jacoco/test/jacocoTestReport.xml
+          sourcePaths: ./bridge/src/main/gradle
+          token: ${{ secrets.PR_GITHUB_TOKEN }}
 
