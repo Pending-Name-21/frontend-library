@@ -27,3 +27,12 @@ Then you can add bridge as any other dependency.
 
 `    implementation("bridge:bridge-0.0.0")`
 
+# Test Coverage
+The test coverage reports are created using [JaCoCo](https://www.eclemma.org/jacoco/).
+
+Test coverage can be generated either
+` $./gradlew build
+` $./gradlew test jacocoTestReport
+
+JaCoCo generates HTML reports which canb be found at "./bridge/build/reports/jacoco/test/html"
+
