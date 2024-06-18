@@ -52,9 +52,11 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true 
-          files: ./bridge/build/reports/jacoco/test/jacocoTestReport.xml
+          file: ./bridge/build/reports/jacoco/test/jacocoTestReport.xml
           name: frontend-library
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
           plugin: noop
+          os: linux
+          flags: unittests
 
