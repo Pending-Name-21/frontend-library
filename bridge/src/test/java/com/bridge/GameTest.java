@@ -1,12 +1,10 @@
 package com.bridge;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import com.bridge.core.exceptions.GameException;
+import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
 import com.bridge.core.exceptions.processinputhandler.NullInputListenersException;
 import com.bridge.gamesettings.AGameSettings;
+import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.processinputhandler.InputVerifier;
 import com.bridge.processinputhandler.ProcessInputPublisher;
 import com.bridge.processinputhandler.listeners.InputListener;
@@ -16,11 +14,14 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class GameTest {
     private TestInputVerifier inputVerifier;
     private TestGameSettings gameSettings;
     private TestUpdatePublisher updatePublisher;
     private RenderManager renderManager;
+    private TestGameInitializer gameInitializer;
     private Game game;
 
     @BeforeEach
@@ -29,7 +30,20 @@ class GameTest {
         gameSettings = new TestGameSettings();
         updatePublisher = new TestUpdatePublisher();
         renderManager = new RenderManager();
-        game = new Game(inputVerifier, gameSettings, updatePublisher, renderManager);
+        gameInitializer = new TestGameInitializer();
+        game = new Game(inputVerifier, gameSettings, updatePublisher, renderManager, gameInitializer);
+    }
+
+    @Test
+    void testInitialize() throws GameException {
+        game.initialize();
+        assertTrue(gameInitializer.notified);
+    }
+
+    @Test
+    public void testInitializeWith() {
+        gameInitializer.throwException = true;
+        assertThrows(GameException.class, game::run);
     }
 
     @Test
@@ -111,6 +125,19 @@ class GameTest {
 
         @Override
         public void notifySubscribers() {
+            notified = true;
+        }
+    }
+
+    static class TestGameInitializer extends GameInitializer {
+        boolean notified = false;
+        public boolean throwException = false;
+
+        @Override
+        public void initializeSubscribers() throws NotPossibleToInitializeSubscribersException {
+            if (throwException) {
+                throw new NotPossibleToInitializeSubscribersException();
+            }
             notified = true;
         }
     }

@@ -10,7 +10,7 @@ import java.util.logging.Level;
 public class NotPossibleToNotifySubscribersException extends GameException {
 
     /**
-     * Constructs an FetchingEventsException with the specified detail message.
+     * Constructs an NotPossibleToNotifySubscribersException with the specified detail message.
      */
     public NotPossibleToNotifySubscribersException() {
         super("Error notifying subscribers");

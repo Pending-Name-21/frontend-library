@@ -1,6 +1,6 @@
 package com.bridge.initializerhandler;
 
-import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersException;
+import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +29,15 @@ public class GameInitializer {
     /**
      * Initializes all subscribed components.
      *
-     * @throws NotPossibleToNotifySubscribersException if initialization fails
+     * @throws NotPossibleToInitializeSubscribersException if initialization fails
      */
-    public void initializeSubscribers() throws NotPossibleToNotifySubscribersException {
+    public void initializeSubscribers() throws NotPossibleToInitializeSubscribersException {
         try {
             for (IIinitializerSubscriber subscriber : initializerSubscribers) {
                 subscriber.init();
             }
         } catch (Exception e) {
-            throw new NotPossibleToNotifySubscribersException(e.getCause());
+            throw new NotPossibleToInitializeSubscribersException(e.getCause());
         }
     }
 }

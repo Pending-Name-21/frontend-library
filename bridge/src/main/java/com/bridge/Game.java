@@ -42,7 +42,7 @@ public class Game {
     /**
      * Initializes game subscribers initializers.
      */
-    private void initialize() throws GameException {
+    public void initialize() throws GameException {
         gameInitializer.initializeSubscribers();
     }
 
