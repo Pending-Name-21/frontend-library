@@ -1,5 +1,6 @@
 plugins {
     `java-library`
+    jacoco
     id("com.diffplug.spotless") version "6.25.0"
 }
 
@@ -35,3 +36,10 @@ spotless {
 
 version = "0.0.0-alpha.0.2.0"
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+    reports {
+        xml.required = true
+        csv.required = false
+    }
+}
