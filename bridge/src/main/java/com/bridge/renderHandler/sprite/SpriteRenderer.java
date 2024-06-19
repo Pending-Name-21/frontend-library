@@ -2,6 +2,7 @@ package com.bridge.renderHandler.sprite;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -64,9 +65,10 @@ public class SpriteRenderer {
     public native void renderSprite(Sprite sprite) throws RenderException;
 
     /**
-     * Renders all sprites in the list.
+     * Renders all sprites in the list, sorting them by their position in z.
      */
     public void renderAllSprites() throws RenderException {
+        sprites.sort(Comparator.comparingDouble(sprite -> sprite.getPosition().getZ()));
         for (Sprite sprite : sprites) {
             try {
                 renderSprite(sprite);
