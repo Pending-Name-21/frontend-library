@@ -1,9 +1,10 @@
 package com.bridge.renderHandler.sound;
 
-import com.bridge.core.exceptions.renderHandlerExceptions.SoundException;
-import com.bridge.renderHandler.sprite.Sprite;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bridge.core.exceptions.renderHandlerExceptions.SoundException;
+import com.bridge.renderHandler.sprite.Sprite;
 
 /**
  * SoundPlayer class that manages a collection of sounds and their playback.
@@ -20,10 +21,6 @@ public class SoundPlayer {
     public SoundPlayer(SoundFactory soundFactory) {
         this.sounds = new ArrayList<>();
         this.soundFactory = soundFactory;
-    }
-
-    public SoundPlayer() {
-        this.sounds = new ArrayList<>();
     }
 
     /**

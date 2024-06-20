@@ -1,8 +1,9 @@
 package com.bridge.renderHandler.sprite;
 
-import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 
 /**
  * SpriteRenderer class that manages a collection of sprites and their rendering.
@@ -19,10 +20,6 @@ public class SpriteRenderer {
     public SpriteRenderer(SpriteFactory spriteFactory) {
         this.sprites = new ArrayList<>();
         this.spriteFactory = spriteFactory;
-    }
-
-    public SpriteRenderer() {
-        this.sprites = new ArrayList<>();
     }
 
     /**
