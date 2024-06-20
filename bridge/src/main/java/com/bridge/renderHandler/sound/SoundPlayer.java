@@ -1,10 +1,9 @@
 package com.bridge.renderHandler.sound;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.bridge.core.exceptions.renderHandlerExceptions.SoundException;
 import com.bridge.renderHandler.sprite.Sprite;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SoundPlayer class that manages a collection of sounds and their playback.
