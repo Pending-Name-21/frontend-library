@@ -102,5 +102,5 @@ public class Sprite implements IFile {
     @Override
     public String getPath() {
         return this.path;
-}
+    }
 }
