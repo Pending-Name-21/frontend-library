@@ -32,6 +32,7 @@ spotless {
     googleJavaFormat("1.22.0").aosp().reflowLongStrings().skipJavadocFormatting()
     // fix formatting of type annotations
     formatAnnotations()
+    targetExclude("src/main/java/CoffeeTime/")
   }
 }
 
