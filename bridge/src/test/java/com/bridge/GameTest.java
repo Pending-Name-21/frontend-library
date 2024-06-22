@@ -1,5 +1,8 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
 import com.bridge.gamesettings.AGameSettings;
@@ -9,9 +12,6 @@ import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class GameTest {
     private InputVerifier inputVerifier;
