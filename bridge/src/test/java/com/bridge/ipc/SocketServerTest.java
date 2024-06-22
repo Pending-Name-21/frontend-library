@@ -18,7 +18,7 @@ class SocketServerTest {
 
     @Test
     @Disabled
-    void startClient() {
+    void startServer() {
         SocketServer socketServer = new SocketServer(new Receiver(), "events-socket.sock");
         socketServer.flush();
         System.out.println("Starting socket server");
