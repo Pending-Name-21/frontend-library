@@ -1,5 +1,7 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
 import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersException;
@@ -10,8 +12,6 @@ import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameWithExceptionsTest {
     private InputVerifier inputVerifier;
