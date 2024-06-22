@@ -1,6 +1,5 @@
 package com.bridge.processinputhandler;
 
-import com.bridge.core.exceptions.processinputhandler.FetchingEventsException;
 import java.util.List;
 
 /**
