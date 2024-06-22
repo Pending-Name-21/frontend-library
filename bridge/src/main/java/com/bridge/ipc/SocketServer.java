@@ -3,6 +3,7 @@ package com.bridge.ipc;
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
@@ -25,10 +26,18 @@ public class SocketServer implements Runnable {
         try (ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
             server.bind(socketAddress);
             System.out.printf("Listening on %s\n", namespace);
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
 
             while (true) {
                 SocketChannel client = server.accept();
-                receiver.handleMessage(client);
+                buffer.clear();
+                int bytesRead = client.read(buffer);
+                if (bytesRead < 0) {
+                    System.out.print("Got empty message\n");
+                    return;
+                }
+                buffer.rewind();
+                receiver.handleMessage(buffer);
             }
 
         } catch (IOException e) {

@@ -1,30 +1,20 @@
 package com.bridge.ipc;
 
-import com.bridge.processinputhandler.AEventBuffer;
 import CoffeeTime.InputEvents.KeyboardEvent;
-import java.io.IOException;
+
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Receiver {
-    private HashMap<String, AEventBuffer> buffers;
-    private final ByteBuffer buffer;
+    private final ConcurrentLinkedQueue<KeyboardEvent> keyboardEvents;
 
-    public Receiver() {
-        buffer = ByteBuffer.allocate(1024);
+    public Receiver(ConcurrentLinkedQueue<KeyboardEvent> keyboardEvents) {
+        this.keyboardEvents = keyboardEvents;
     }
 
-    protected void handleMessage(SocketChannel channel) throws IOException {
-        buffer.clear();
-        int bytesRead = channel.read(buffer);
-        if (bytesRead < 0) {
-            System.out.print("Got empty message\n");
-            return;
-        }
-
-        buffer.rewind();
+    public void handleMessage(ByteBuffer buffer) {
         KeyboardEvent keyboardEvent = KeyboardEvent.getRootAsKeyboardEvent(buffer);
         System.out.printf("Got message: %s\n", keyboardEvent.name());
+        keyboardEvents.add(keyboardEvent);
     }
 }
