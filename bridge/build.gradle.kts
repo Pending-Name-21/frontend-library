@@ -12,6 +12,7 @@ repositories {
 dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("com.google.flatbuffers:flatbuffers-java:23.5.26")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -31,6 +32,7 @@ spotless {
     googleJavaFormat("1.22.0").aosp().reflowLongStrings().skipJavadocFormatting()
     // fix formatting of type annotations
     formatAnnotations()
+    targetExclude("src/main/java/CoffeeTime/")
   }
 }
 
