@@ -1,51 +1,39 @@
 package com.bridge.processinputhandler;
 
-import com.bridge.core.exceptions.processinputhandler.FetchingEventsException;
-import com.bridge.core.exceptions.processinputhandler.NullInputListenersException;
-import com.bridge.processinputhandler.listeners.InputListener;
 import java.util.List;
 
 /**
- * Verifies input by fetching and checking events.
+ * The InputVerifier class is responsible for verifying input by fetching and
+ * checking events from multiple publishers and notifying their respective subscribers.
+ *
+ * <p>This class collaborates with objects that implement the IPublisher interface
+ * to ensure that input events are published and handled appropriately.</p>
+ *
+ * <p>Example usage:</p>
+ * <pre>
+ * List<IPublisher> publishers = Arrays.asList(new KeyboardEventPublisher(), new MouseEventPublisher());
+ * InputVerifier inputVerifier = new InputVerifier(publishers);
+ * inputVerifier.check();
+ * </pre>
  */
 public class InputVerifier {
-    private ProcessInputPublisher processInputPublisher;
-    private List<InputListener> inputListeners;
+    private final List<IPublisher> publishers;
 
     /**
-     * Constructs an InputVerifier with the specified publisher and listeners.
+     * Constructs an InputVerifier with the given list of publishers.
      *
-     * @param processInputPublisher the publisher of input events
-     * @param inputListeners the list of input listeners
+     * @param publishers the list of IPublisher instances that will be used to fetch and check input events
      */
-    public InputVerifier(
-            ProcessInputPublisher processInputPublisher, List<InputListener> inputListeners)
-            throws NullInputListenersException {
-        this.processInputPublisher = processInputPublisher;
-        if (inputListeners == null) throw new NullInputListenersException();
-        this.inputListeners = inputListeners;
+    public InputVerifier(List<IPublisher> publishers) {
+        this.publishers = publishers;
     }
 
     /**
-     * Checks input events and notifies subscribers.
+     * Checks input events from all publishers and notifies their subscribers.
+     * This method iterates through each publisher in the list and calls its publish method,
+     * triggering the notification process for each event.
      */
-    public void check() throws FetchingEventsException {
-        fetchRequiredEvents();
-    }
-
-    /**
-     * Fetches required events from input listeners and notifies subscribers.
-     */
-    public void fetchRequiredEvents() throws FetchingEventsException {
-        try {
-            for (InputListener listener : inputListeners) {
-                List<String> events = listener.listen();
-                for (String event : events) {
-                    processInputPublisher.notifySubscribers(new EventType(event));
-                }
-            }
-        } catch (Exception e) {
-            throw new FetchingEventsException(e);
-        }
+    public void check() {
+        publishers.forEach(IPublisher::publish);
     }
 }
