@@ -22,10 +22,6 @@ public class SoundPlayer {
         this.soundFactory = soundFactory;
     }
 
-    public SoundPlayer() {
-        this.sounds = new ArrayList<>();
-    }
-
     /**
      * Adds a sound to the list.
      *

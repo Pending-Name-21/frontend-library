@@ -1,10 +1,12 @@
 package com.bridge.renderhandler;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.bridge.renderHandler.render.RenderManager;
-import com.bridge.renderHandler.sound.*;
-import com.bridge.renderHandler.sprite.*;
+import com.bridge.renderHandler.sound.SoundFactory;
+import com.bridge.renderHandler.sound.SoundPlayer;
+import com.bridge.renderHandler.sprite.SpriteFactory;
+import com.bridge.renderHandler.sprite.SpriteRenderer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +14,15 @@ public class RenderManagerTest {
     private SpriteRenderer spriteRenderer;
     private SoundPlayer soundPlayer;
     private RenderManager renderManager;
+    private SpriteFactory spriteFactory;
+    private SoundFactory soundFactory;
 
     @BeforeEach
     void setUp() {
-        spriteRenderer = new SpriteRenderer();
-        soundPlayer = new SoundPlayer();
+        spriteFactory = new SpriteFactory();
+        soundFactory = new SoundFactory();
+        spriteRenderer = new SpriteRenderer(spriteFactory);
+        soundPlayer = new SoundPlayer(soundFactory);
         renderManager = new RenderManager(spriteRenderer, soundPlayer);
     }
 

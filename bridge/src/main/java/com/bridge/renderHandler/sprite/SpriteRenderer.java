@@ -21,10 +21,6 @@ public class SpriteRenderer {
         this.spriteFactory = spriteFactory;
     }
 
-    public SpriteRenderer() {
-        this.sprites = new ArrayList<>();
-    }
-
     /**
      * Adds a sprite to the list.
      *

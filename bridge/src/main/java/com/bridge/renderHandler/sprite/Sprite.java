@@ -1,7 +1,9 @@
 package com.bridge.renderHandler.sprite;
 
-import com.bridge.renderHandler.*;
-import com.bridge.renderHandler.sound.*;
+import com.bridge.renderHandler.Coord;
+import com.bridge.renderHandler.IFile;
+import com.bridge.renderHandler.Size;
+import com.bridge.renderHandler.sound.Sound;
 
 /**
  * Sprite class that represents a sprite with position, size and path attributes.
