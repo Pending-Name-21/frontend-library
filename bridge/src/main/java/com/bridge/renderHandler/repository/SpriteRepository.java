@@ -25,12 +25,12 @@ public class SpriteRepository implements IRepository<Sprite> {
     }
 
     /**
-     * Retrieves all sprites from the repository.
+     * Retrieves only visible sprites from the repository.
      *
-     * @return an array of sprites from the repository.
+     * @return a list of visible sprites from the repository.
      */
     @Override
-    public Sprite[] retrieve() {
-        return sprites.toArray(new Sprite[0]);
+    public List<Sprite> retrieve() {
+        return sprites.stream().filter(sprite -> !sprite.isHidden()).toList();
     }
 }

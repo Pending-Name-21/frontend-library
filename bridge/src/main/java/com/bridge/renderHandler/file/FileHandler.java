@@ -1,4 +1,6 @@
 package com.bridge.renderHandler.file;
+import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,10 +26,10 @@ public class FileHandler {
      * @param filePath the file path
      * @return a Path object with the filePath
      */
-    public Path getFilePath(String filePath) {
+    public Path getFilePath(String filePath) throws NonExistentFilePathException {
         Path path = Paths.get(filePath);
         if (!pathExists(path)) {
-            throw new IllegalArgumentException("File does not exist: " + filePath);
+            throw new NonExistentFilePathException(filePath);
         }
         return path;
     }

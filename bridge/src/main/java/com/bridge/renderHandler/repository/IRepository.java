@@ -1,5 +1,7 @@
 package com.bridge.renderHandler.repository;
 
+import java.util.List;
+
 /**
  * A repository interface for handling storage and retrieval of items.
  *
@@ -17,7 +19,7 @@ public interface IRepository<T> {
     /**
      * Retrieves all items from the repository.
      *
-     * @return an array of items from the repository.
+     * @return a list of items from the repository.
      */
-    T[] retrieve();
+    List<T> retrieve();
 }

@@ -1,5 +1,6 @@
 package com.bridge.renderHandler.sound;
 
+import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
 import com.bridge.renderHandler.file.FileHandler;
 import com.bridge.renderHandler.repository.IRepository;
 
@@ -29,7 +30,7 @@ public class SoundBuilder {
      * @param filePath the file path.
      * @return the current instance of SoundBuilder.
      */
-    public SoundBuilder buildPath(String filePath) {
+    public SoundBuilder buildPath(String filePath) throws NonExistentFilePathException {
         this.filePath = fileHandler.getFilePath(filePath);
         return this;
     }

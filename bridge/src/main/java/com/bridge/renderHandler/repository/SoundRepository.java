@@ -28,13 +28,12 @@ public class SoundRepository implements IRepository<Sound> {
     /**
      * Retrieves only playable sounds from the repository.
      *
-     * @return an array of playable sounds from the repository.
+     * @return a list of playable sounds from the repository.
      */
     @Override
-    public Sound[] retrieve() {
+    public List<Sound> retrieve() {
         return sounds.stream()
-                .filter(Sound::canPlay)
-                .toArray(Sound[]::new);
+                .filter(Sound::canPlay).toList();
     }
 }
 
