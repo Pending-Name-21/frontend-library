@@ -1,5 +1,8 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
 import com.bridge.gamesettings.AGameSettings;
@@ -9,13 +12,9 @@ import com.bridge.processinputhandler.KeyboardEventManager;
 import com.bridge.processinputhandler.MouseEventManager;
 import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class GameTest {
     private InputVerifier inputVerifier;
@@ -27,7 +26,8 @@ class GameTest {
 
     @BeforeEach
     void setUp() throws GameException {
-        inputVerifier = new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
+        inputVerifier =
+                new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
         gameSettings = new TestGameSettings();
         updatePublisher = new TestUpdatePublisher();
         renderManager = new RenderManager();

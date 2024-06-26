@@ -8,8 +8,11 @@ import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersEx
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.processinputhandler.InputVerifier;
+import com.bridge.processinputhandler.KeyboardEventManager;
+import com.bridge.processinputhandler.MouseEventManager;
 import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +26,8 @@ class GameWithExceptionsTest {
 
     @BeforeEach
     void setUp() throws GameException {
-        inputVerifier = Utils.makeEmptyInputVerifier();
+        inputVerifier =
+                new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
         gameSettings = new TestGameSettings();
         updatePublisher = new UpdatePublisher();
         renderManager = new RenderManager();
