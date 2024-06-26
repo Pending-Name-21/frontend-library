@@ -3,8 +3,6 @@ package com.bridge.renderhandler;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.bridge.renderHandler.render.RenderManager;
-import com.bridge.renderHandler.sound.SoundFactory;
-import com.bridge.renderHandler.sound.SoundPlayer;
 import com.bridge.renderHandler.sprite.SpriteFactory;
 import com.bridge.renderHandler.sprite.SpriteRenderer;
 import org.junit.jupiter.api.BeforeEach;
