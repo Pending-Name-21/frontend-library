@@ -5,7 +5,6 @@ import CoffeeTime.InputEvents.Keyboard;
 import CoffeeTime.InputEvents.Mouse;
 import CoffeeTime.InputEvents.Position;
 import com.google.flatbuffers.FlatBufferBuilder;
-
 import java.nio.ByteBuffer;
 
 public class EventGenerator {
@@ -31,12 +30,13 @@ public class EventGenerator {
     public ByteBuffer makeEvent() {
         int mouseOffset = mouseGenerator("MousePressed", "Left");
         int keyboardOffset = keyboardGenerator("KeyPressed", "Return");
-        int eventOffset = Event.createEvent(builder, mouseOffset, keyboardOffset);
+        int eventOffset = Event.createEvent(builder, keyboardOffset, mouseOffset);
         builder.finish(eventOffset);
         return builder.dataBuffer();
     }
 
-    public ByteBuffer makeEvent(String mouseType, String buttonName, String keyboardType, String keyName) {
+    public ByteBuffer makeEvent(
+            String mouseType, String buttonName, String keyboardType, String keyName) {
         int mouseOffset = mouseGenerator(mouseType, buttonName);
         int keyboardOffset = keyboardGenerator(keyboardType, keyName);
         int eventOffset = Event.createEvent(builder, mouseOffset, keyboardOffset);

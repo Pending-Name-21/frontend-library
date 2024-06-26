@@ -1,22 +1,22 @@
 package com.bridge.processinputhandler;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.bridge.EventGenerator;
 import com.bridge.ipc.Receiver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class InputVerifierTest {
 
     @Test
     void verifyEventPublication() {
         KeyboardEventManager keyboardManager = new KeyboardEventManager();
-        keyboardManager.subscribe(event -> {
-            assertEquals("KeyPressed", event.type());
-            assertEquals("Return", event.type());
-        });
+        keyboardManager.subscribe(
+                event -> {
+                    assertEquals("KeyPressed", event.type());
+                    assertEquals("Return", event.key());
+                });
 
         Receiver receiver = new Receiver();
         receiver.addBuffer(keyboardManager);

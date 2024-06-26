@@ -1,6 +1,5 @@
 package com.bridge.ipc;
 
-import CoffeeTime.InputEvents.Event;
 import com.bridge.EventGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
