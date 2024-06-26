@@ -1,8 +1,7 @@
-package com.bridge.renderhandler.repository;
+package com.bridge.renderHandler.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.renderHandler.sprite.Coord;
 import com.bridge.renderHandler.sprite.Size;
 import com.bridge.renderHandler.sprite.Sprite;

@@ -1,8 +1,7 @@
-package com.bridge.renderhandler.repository;
+package com.bridge.renderHandler.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.bridge.renderHandler.repository.SoundRepository;
 import com.bridge.renderHandler.sound.Sound;
 import java.nio.file.Paths;
 import java.util.List;

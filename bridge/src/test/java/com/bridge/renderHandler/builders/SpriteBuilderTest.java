@@ -1,9 +1,8 @@
-package com.bridge.renderhandler.builders;
+package com.bridge.renderHandler.builders;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
-import com.bridge.renderHandler.builders.SpriteBuilder;
 import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.renderHandler.sprite.Sprite;
 import java.io.IOException;
