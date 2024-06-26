@@ -1,32 +1,60 @@
 package com.bridge.renderHandler.sound;
 
-import com.bridge.renderHandler.*;
+import com.bridge.renderHandler.file.IFile;
+
+import java.nio.file.Path;
 
 /**
- * Abstract Sound class that represents a sound.
+ * Represents a sound with playback state and file path.
  */
-public abstract class Sound implements IFile {
-
-    private String path;
+public class Sound implements IFile {
+    private boolean isPlaying;
+    private final Path path;
 
     /**
-     * Constructor that initializes a sound.
+     * Constructs a Sound with specified path.
      *
-     * @param path the file path of the sound
+     * @param path the file path of the sound.
      */
-    public Sound(String path) {
+    public Sound(Path path) {
         this.path = path;
+        this.isPlaying = false;
     }
 
     /**
-     * Abstract method to check if the sound can be played.
+     * Checks if the sound is being played.
      *
-     * @return true if the sound can be played, false otherwise
+     * @return true if the sound is playing, false otherwise
      */
-    public abstract boolean canPlay();
+    public boolean isPlaying() {
+        return isPlaying;
+    }
 
+    /**
+     * Sets the playing state of the sound.
+     *
+     * @param playing true to set the sound as playing, false otherwise
+     */
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
+
+    /**
+     * Determines if the sound can be played.
+     *
+     * @return true if the sound is not currently playing, false otherwise.
+     */
+    public boolean canPlay() {
+        return !isPlaying;
+    }
+
+    /**
+     * Gets the sound file path.
+     *
+     * @return the file path
+     */
     @Override
-    public String getPath() {
-        return this.path;
+    public Path getPath() {
+        return path;
     }
 }

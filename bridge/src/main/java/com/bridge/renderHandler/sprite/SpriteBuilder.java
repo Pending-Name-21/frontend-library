@@ -1,9 +1,9 @@
 package com.bridge.renderHandler.sprite;
 
-import com.bridge.renderHandler.Coord;
-import com.bridge.renderHandler.Size;
 import com.bridge.renderHandler.file.FileHandler;
 import com.bridge.renderHandler.repository.IRepository;
+import com.bridge.renderHandler.sprite.attributes.Coord;
+import com.bridge.renderHandler.sprite.attributes.Size;
 
 import java.nio.file.Path;
 
@@ -12,7 +12,7 @@ import java.nio.file.Path;
  */
 public class SpriteBuilder {
     private IRepository<Sprite> spriteRepository;
-    private FileHandler fileHandler;
+    private final FileHandler fileHandler;
     private Coord coord;
     private Size size;
     private Path filePath;

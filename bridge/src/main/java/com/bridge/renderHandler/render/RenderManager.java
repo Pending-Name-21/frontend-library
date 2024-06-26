@@ -2,8 +2,6 @@ package com.bridge.renderHandler.render;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.core.exceptions.renderHandlerExceptions.SoundException;
-import com.bridge.renderHandler.sprite.SpriteFactory;
-import com.bridge.renderHandler.sprite.SpriteRenderer;
 
 /**
  * RenderManager class that manages the rendering of sprites and playing of sounds.
