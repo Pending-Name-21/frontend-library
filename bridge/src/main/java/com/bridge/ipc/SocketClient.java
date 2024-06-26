@@ -10,15 +10,19 @@ import java.nio.channels.SocketChannel;
  * This class provides a client-side connection for inter-process communication (IPC)
  * using Unix domain sockets.
  */
-public class SocketClient {
+public class SocketClient implements AutoCloseable {
     private SocketChannel channel;
+
+    public SocketChannel getSocket() {
+        return channel;
+    }
 
     /**
      * Constructs a new `SocketClient` instance connected to the specified namespace.
      *
      * @param namespace The name of the Unix domain socket to connect to.
      */
-    public SocketClient(String namespace) {
+    public SocketClient(String namespace) throws IOException {
         try {
             channel = SocketChannel.open(StandardProtocolFamily.UNIX);
             UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);
@@ -26,6 +30,7 @@ public class SocketClient {
         } catch (IOException e) {
             // TODO: handle error
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -36,14 +41,22 @@ public class SocketClient {
      *
      * @param buffer The byte buffer containing the data to be sent.
      */
-    protected void send(ByteBuffer buffer) {
+    protected void send(ByteBuffer buffer) throws IOException {
         while (buffer.hasRemaining()) {
             try {
                 channel.write(buffer);
             } catch (IOException e) {
                 // TODO: handle error
                 e.printStackTrace();
+                throw e;
             }
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (channel != null && channel.isOpen()) {
+            channel.close();
         }
     }
 }
