@@ -29,9 +29,11 @@ public class Transmitter {
      */
     public void send(com.bridge.renderHandler.render.Frame frame) {
         builder = new FlatBufferBuilder();
+        int sprites = handleSprites(frame.sprites());
+        int sounds = handleSounds(frame.sounds());
         Frame.startFrame(builder);
-        Frame.addSprites(builder, handleSprites(frame.sprites()));
-        Frame.addSounds(builder, handleSounds(frame.sounds()));
+        Frame.addSprites(builder, sprites);
+        Frame.addSounds(builder, sounds);
         int serializedFrame = Frame.endFrame(builder);
         builder.finish(serializedFrame);
         socketClient.send(builder.dataBuffer());
