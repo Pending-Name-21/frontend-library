@@ -1,11 +1,10 @@
 package com.bridge.core.exceptions.renderHandlerExceptions;
 
-import com.bridge.core.exceptions.GameException;
-import org.junit.jupiter.api.Test;
-
-import java.util.logging.Level;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.bridge.core.exceptions.GameException;
+import java.util.logging.Level;
+import org.junit.jupiter.api.Test;
 
 class NonExistentFilePathExceptionTest {
 
@@ -33,4 +32,3 @@ class NonExistentFilePathExceptionTest {
         assertTrue(exception instanceof GameException);
     }
 }
-
