@@ -13,8 +13,8 @@ import com.bridge.renderHandler.sprite.SpriteRenderer;
 public class RenderManager {
     public SpriteRenderer spriteRenderer;
     public SoundPlayer soundPlayer;
-    public boolean spritesRendered = false;
-    public boolean soundsPlayed = false;
+//    public boolean spritesRendered = false;
+//    public boolean soundsPlayed = false;
 
     /**
      * Constructor that initializes the rendering and sound playing components.
@@ -40,11 +40,11 @@ public class RenderManager {
     public void renderSprites() {
         try {
             spriteRenderer.renderAllSprites();
-            spritesRendered = true;
+//            spritesRendered = true;
         } catch (RenderException e) {
             System.err.println("Error rendering sprites: " + e.getMessage());
             e.printStackTrace();
-            spritesRendered = false;
+//            spritesRendered = false;
         }
     }
 
@@ -54,11 +54,11 @@ public class RenderManager {
     public void playSounds() {
         try {
             soundPlayer.playAllSounds();
-            soundsPlayed = true;
+//            soundsPlayed = true;
         } catch (SoundException e) {
             System.err.println("Error playing sounds: " + e.getMessage());
             e.printStackTrace();
-            soundsPlayed = false;
+//            soundsPlayed = false;
         }
     }
 }
