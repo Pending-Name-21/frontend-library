@@ -1,32 +1,29 @@
 package com.bridge.renderHandler.sprite;
 
-import com.bridge.renderHandler.Coord;
-import com.bridge.renderHandler.IFile;
-import com.bridge.renderHandler.Size;
-import com.bridge.renderHandler.sound.Sound;
+import com.bridge.renderHandler.file.IFile;
+import java.nio.file.Path;
 
 /**
- * Sprite class that represents a sprite with position, size and path attributes.
+ * Represents a graphical sprite with position, size, visibility, and file path.
  */
 public class Sprite implements IFile {
-
     private Coord position;
     private Size size;
     private boolean isHidden;
-    private Sound sound;
-    private String path;
+    private final Path path;
 
     /**
-     * Constructor that initializes a sprite.
+     * Constructs a Sprite with specified position, size, and path.
      *
-     * @param position the position of the sprite
-     * @param size the size of the sprite
-     * @param path the file path of the sprite
+     * @param position the coordinates of the sprite.
+     * @param size the size of the sprite.
+     * @param path the file path of the sprite image.
      */
-    public Sprite(Coord position, Size size, String path) {
+    public Sprite(Coord position, Size size, Path path) {
         this.position = position;
         this.size = size;
         this.path = path;
+        this.isHidden = false;
     }
 
     /**
@@ -84,25 +81,12 @@ public class Sprite implements IFile {
     }
 
     /**
-     * Gets the sound associated with the sprite.
+     * Gets the sprite file path.
      *
-     * @return the sound associated with the sprite
+     * @return the file path
      */
-    public Sound getSound() {
-        return sound;
-    }
-
-    /**
-     * Sets the sound associated with the sprite.
-     *
-     * @param sound the new sound associated with the sprite
-     */
-    public void setSound(Sound sound) {
-        this.sound = sound;
-    }
-
     @Override
-    public String getPath() {
+    public Path getPath() {
         return this.path;
     }
 }

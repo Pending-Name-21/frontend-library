@@ -64,12 +64,7 @@ public class Game {
      * Renders sprites and plays sounds
      */
     public void render() {
-        renderManager.renderSprites();
-        renderManager.playSounds();
-    }
-
-    public RenderManager getRenderManager() {
-        return renderManager;
+        renderManager.render();
     }
 
     /**

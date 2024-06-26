@@ -1,4 +1,6 @@
-package com.bridge.renderHandler;
+package com.bridge.renderHandler.file;
+
+import java.nio.file.Path;
 
 /**
  * IFile interface that represents a file with a path.
@@ -10,5 +12,5 @@ public interface IFile {
      *
      * @return the file path
      */
-    public String getPath();
+    Path getPath();
 }
