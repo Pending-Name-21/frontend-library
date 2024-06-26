@@ -4,32 +4,31 @@ import CoffeeTime.InputEvents.Event;
 import CoffeeTime.InputEvents.Keyboard;
 
 /**
- * The KeyboardEventPublisher class implements the IPublisher interface
- * to publish keyboard events to subscribed listeners.
+ * The KeyboardEventManager class extends AEventManager to manage and publish keyboard events
+ * to subscribed listeners.
  *
  * <p>This class manages a buffer of keyboard events and notifies all subscribed
- * IKeyboardEventSubscriber instances when new events are published.</p>
+ * IEventSubscriber instances when new events are published.</p>
  *
  * <p>Example usage:</p>
  * <pre>
- * // Create a buffer for keyboard events
- * ConcurrentLinkedQueue<KeyboardEvent> eventBuffer = new ConcurrentLinkedQueue<>();
+ * // Create an instance of KeyboardEventManager
+ * KeyboardEventManager eventManager = new KeyboardEventManager();
  *
- * // Create a publisher and add subscribers
- * KeyboardEventPublisher publisher = new KeyboardEventPublisher(eventBuffer);
- * publisher.subscribe(new MyKeyboardEventSubscriber());
+ * // Add subscribers to the event manager
+ * eventManager.subscribe(new MyKeyboardEventSubscriber());
  *
- * // Simulate publishing events
- * eventBuffer.add(new KeyboardEvent(...));
- * publisher.publish();
+ * // Simulate feeding and publishing events
+ * Event event = new Event(...);
+ * eventManager.feed(event);
+ * eventManager.publish();
  * </pre>
  */
 public class KeyboardEventManager extends AEventManager<Keyboard> {
 
     /**
-     * Constructs a KeyboardEventPublisher with the specified event buffer.
-     *
-     * @param buffer the concurrent linked queue used to store keyboard events
+     * Constructs a KeyboardEventManager.
+     * Initializes the event buffer and subscriber list.
      */
     public KeyboardEventManager() {
         super();
@@ -38,8 +37,9 @@ public class KeyboardEventManager extends AEventManager<Keyboard> {
     /**
      * Subscribes a listener to receive keyboard events.
      *
-     * @param subscriber the subscriber implementing IKeyboardEventSubscriber
+     * @param subscriber the subscriber implementing IEventSubscriber<Keyboard>
      */
+    @Override
     public void subscribe(IEventSubscriber<Keyboard> subscriber) {
         subscribers.add(subscriber);
     }
@@ -52,13 +52,15 @@ public class KeyboardEventManager extends AEventManager<Keyboard> {
      */
     @Override
     public void publish() {
-        subscribers.forEach(
-                sub -> {
-                    events.forEach(sub::doNotify);
-                });
+        subscribers.forEach(subscriber -> events.forEach(subscriber::doNotify));
         events.clear();
     }
 
+    /**
+     * Adds a new event to the buffer.
+     *
+     * @param event the event containing the keyboard event to be added
+     */
     @Override
     public void feed(Event event) {
         events.add(event.keyboard());
