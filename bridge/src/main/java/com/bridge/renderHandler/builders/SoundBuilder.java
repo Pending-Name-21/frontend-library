@@ -1,9 +1,9 @@
-package com.bridge.renderHandler.sound;
+package com.bridge.renderHandler.builders;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
 import com.bridge.renderHandler.file.FileHandler;
 import com.bridge.renderHandler.repository.IRepository;
-
+import com.bridge.renderHandler.sound.Sound;
 import java.nio.file.Path;
 
 /**
@@ -46,4 +46,3 @@ public class SoundBuilder {
         return sound;
     }
 }
-

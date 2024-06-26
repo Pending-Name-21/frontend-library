@@ -1,9 +1,6 @@
 package com.bridge.renderHandler.sprite;
 
 import com.bridge.renderHandler.file.IFile;
-import com.bridge.renderHandler.sprite.attributes.Coord;
-import com.bridge.renderHandler.sprite.attributes.Size;
-
 import java.nio.file.Path;
 
 /**

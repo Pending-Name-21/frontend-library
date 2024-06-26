@@ -1,7 +1,6 @@
 package com.bridge.renderHandler.repository;
 
 import com.bridge.renderHandler.sound.Sound;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +31,6 @@ public class SoundRepository implements IRepository<Sound> {
      */
     @Override
     public List<Sound> retrieve() {
-        return sounds.stream()
-                .filter(Sound::canPlay).toList();
+        return sounds.stream().filter(Sound::canPlay).toList();
     }
 }
-

@@ -1,7 +1,6 @@
 package com.bridge.core.exceptions.renderHandlerExceptions;
 
 import com.bridge.core.exceptions.GameException;
-
 import java.util.logging.Level;
 
 public class NonExistentFilePathException extends GameException {

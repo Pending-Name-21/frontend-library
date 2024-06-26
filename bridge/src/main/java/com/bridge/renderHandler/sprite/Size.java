@@ -1,4 +1,4 @@
-package com.bridge.renderHandler.sprite.attributes;
+package com.bridge.renderHandler.sprite;
 
 /**
  * Size class that represents the size of a sprite.

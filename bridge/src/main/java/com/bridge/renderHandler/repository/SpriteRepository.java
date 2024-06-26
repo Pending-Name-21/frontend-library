@@ -1,6 +1,6 @@
 package com.bridge.renderHandler.repository;
-import com.bridge.renderHandler.sprite.Sprite;
 
+import com.bridge.renderHandler.sprite.Sprite;
 import java.util.ArrayList;
 import java.util.List;
 

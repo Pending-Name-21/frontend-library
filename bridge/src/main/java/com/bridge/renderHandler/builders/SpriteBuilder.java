@@ -1,11 +1,11 @@
-package com.bridge.renderHandler.sprite;
+package com.bridge.renderHandler.builders;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
 import com.bridge.renderHandler.file.FileHandler;
 import com.bridge.renderHandler.repository.IRepository;
-import com.bridge.renderHandler.sprite.attributes.Coord;
-import com.bridge.renderHandler.sprite.attributes.Size;
-
+import com.bridge.renderHandler.sprite.Coord;
+import com.bridge.renderHandler.sprite.Size;
+import com.bridge.renderHandler.sprite.Sprite;
 import java.nio.file.Path;
 
 /**

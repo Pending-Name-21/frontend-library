@@ -1,4 +1,4 @@
-package com.bridge.renderHandler.sprite.attributes;
+package com.bridge.renderHandler.sprite;
 
 /**
  * Coord class that represents the position of a sprite.
