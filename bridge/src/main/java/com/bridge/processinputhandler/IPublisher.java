@@ -30,7 +30,7 @@ package com.bridge.processinputhandler;
  * }
  * </pre>
  */
-public interface IPublisher {
+public interface IPublisher<T> {
 
     /**
      * Called to publish an event or message to all subscribers.
@@ -38,4 +38,5 @@ public interface IPublisher {
      * to notify subscribers when an event occurs.
      */
     void publish();
+    void subscribe(IEventSubscriber<T> subscriber);
 }

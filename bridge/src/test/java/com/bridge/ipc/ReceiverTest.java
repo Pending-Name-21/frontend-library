@@ -1,27 +1,19 @@
 package com.bridge.ipc;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import CoffeeTime.InputEvents.KeyboardEvent;
-import com.bridge.Utils;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import CoffeeTime.InputEvents.Event;
+import com.bridge.EventGenerator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ReceiverTest {
 
     @Test
-    void verifyDeserialization() {
-        Optional<ConcurrentLinkedQueue<KeyboardEvent>> buffer = Utils.createBuffer();
-        if (buffer.isEmpty()) {
-            fail();
-        }
+    void simpleEventDeserialization() {
+        Receiver receiver = new Receiver();
+        receiver.addBuffer(Assertions::assertNotNull);
+        receiver.handleMessage(new EventGenerator().makeEvent());
 
-        buffer.get()
-                .forEach(
-                        event -> {
-                            assertEquals("Pressed", event.state());
-                            assertEquals("Return", event.name());
-                        });
+        receiver.addBuffer(Assertions::assertNotNull);
+        receiver.handleMessage(new EventGenerator().makeEvent());
     }
 }

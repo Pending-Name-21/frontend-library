@@ -1,12 +1,13 @@
 package com.bridge.ipc;
 
-import CoffeeTime.InputEvents.KeyboardEvent;
+import CoffeeTime.InputEvents.Event;
 import java.nio.ByteBuffer;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@code Receiver} class is responsible for handling and processing incoming keyboard events.
- * It receives messages in the form of a {@link ByteBuffer}, converts them to {@link KeyboardEvent} objects,
+ * It receives messages in the form of a {@link ByteBuffer}, converts them to {@link Event} objects,
  * and stores them in a thread-safe queue.
  */
 public class Receiver {
@@ -14,26 +15,18 @@ public class Receiver {
     /**
      * A thread-safe queue to store keyboard events.
      */
-    private final ConcurrentLinkedQueue<KeyboardEvent> keyboardEvents;
+    private final List<IEventBuffer> eventBuffers;
 
-    /**
-     * Constructs a {@code Receiver} with the specified queue to store keyboard events.
-     *
-     * @param keyboardEvents the queue to store the keyboard events
-     */
-    public Receiver(ConcurrentLinkedQueue<KeyboardEvent> keyboardEvents) {
-        this.keyboardEvents = keyboardEvents;
+    public Receiver() {
+        eventBuffers = new ArrayList<>();
     }
 
-    /**
-     * Processes the incoming message buffer, converts it to a {@link KeyboardEvent},
-     * and adds it to the queue of keyboard events.
-     *
-     * @param buffer the message buffer containing the keyboard event data
-     */
-    public void handleMessage(ByteBuffer buffer) {
-        KeyboardEvent keyboardEvent = KeyboardEvent.getRootAsKeyboardEvent(buffer);
-        System.out.printf("Got message: %s\n", keyboardEvent.name());
-        keyboardEvents.add(keyboardEvent);
+    public void handleMessage(ByteBuffer message) {
+        Event event = Event.getRootAsEvent(message);
+        eventBuffers.forEach(buffer -> buffer.feed(event));
+    }
+
+    public void addBuffer(IEventBuffer buffer) {
+        eventBuffers.add(buffer);
     }
 }
