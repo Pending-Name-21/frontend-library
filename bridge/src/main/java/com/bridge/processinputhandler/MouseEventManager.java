@@ -4,61 +4,63 @@ import CoffeeTime.InputEvents.Event;
 import CoffeeTime.InputEvents.Mouse;
 
 /**
- * The KeyboardEventPublisher class implements the IPublisher interface
- * to publish keyboard events to subscribed listeners.
+ * The MouseEventManager class extends AEventManager to manage and publish mouse events
+ * to subscribed listeners.
  *
- * <p>This class manages a buffer of keyboard events and notifies all subscribed
- * IKeyboardEventSubscriber instances when new events are published.</p>
+ * <p>This class manages a buffer of mouse events and notifies all subscribed
+ * IEventSubscriber instances when new events are published.</p>
  *
  * <p>Example usage:</p>
  * <pre>
- * // Create a buffer for keyboard events
- * ConcurrentLinkedQueue<KeyboardEvent> eventBuffer = new ConcurrentLinkedQueue<>();
+ * // Create an instance of MouseEventManager
+ * MouseEventManager eventManager = new MouseEventManager();
  *
- * // Create a publisher and add subscribers
- * KeyboardEventPublisher publisher = new KeyboardEventPublisher(eventBuffer);
- * publisher.subscribe(new MyKeyboardEventSubscriber());
+ * // Add subscribers to the event manager
+ * eventManager.subscribe(new MyMouseEventSubscriber());
  *
- * // Simulate publishing events
- * eventBuffer.add(new KeyboardEvent(...));
- * publisher.publish();
+ * // Simulate feeding and publishing events
+ * Event event = new Event(...);
+ * eventManager.feed(event);
+ * eventManager.publish();
  * </pre>
  */
 public class MouseEventManager extends AEventManager<Mouse> {
 
     /**
-     * Constructs a KeyboardEventPublisher with the specified event buffer.
-     *
-     * @param buffer the concurrent linked queue used to store keyboard events
+     * Constructs a MouseEventManager.
+     * Initializes the event buffer and subscriber list.
      */
     public MouseEventManager() {
         super();
     }
 
     /**
-     * Subscribes a listener to receive keyboard events.
+     * Subscribes a listener to receive mouse events.
      *
-     * @param subscriber the subscriber implementing IKeyboardEventSubscriber
+     * @param subscriber the subscriber implementing IEventSubscriber<Mouse>
      */
+    @Override
     public void subscribe(IEventSubscriber<Mouse> subscriber) {
         subscribers.add(subscriber);
     }
 
     /**
-     * Publishes keyboard events to all subscribed listeners.
-     * This method iterates through the buffer of keyboard events and notifies
+     * Publishes mouse events to all subscribed listeners.
+     * This method iterates through the buffer of mouse events and notifies
      * each subscriber using their doNotify method.
      * After notifying subscribers, the buffer is cleared.
      */
     @Override
     public void publish() {
-        subscribers.forEach(
-                sub -> {
-                    events.forEach(sub::doNotify);
-                });
+        subscribers.forEach(subscriber -> events.forEach(subscriber::doNotify));
         events.clear();
     }
 
+    /**
+     * Adds a new event to the buffer.
+     *
+     * @param event the event containing the mouse event to be added
+     */
     @Override
     public void feed(Event event) {
         events.add(event.mouse());

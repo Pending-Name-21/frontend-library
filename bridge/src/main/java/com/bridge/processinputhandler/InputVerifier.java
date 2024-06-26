@@ -11,7 +11,7 @@ import java.util.List;
  *
  * <p>Example usage:</p>
  * <pre>
- * List<IPublisher> publishers = Arrays.asList(new KeyboardEventPublisher(), new MouseEventPublisher());
+ * List&lt;IPublisher&lt;?&gt;&gt; publishers = Arrays.asList(new KeyboardEventPublisher(), new MouseEventPublisher());
  * InputVerifier inputVerifier = new InputVerifier(publishers);
  * inputVerifier.check();
  * </pre>
