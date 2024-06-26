@@ -17,14 +17,14 @@ import java.util.List;
  * </pre>
  */
 public class InputVerifier {
-    private final List<IPublisher> publishers;
+    private final List<IPublisher<?>> publishers;
 
     /**
      * Constructs an InputVerifier with the given list of publishers.
      *
      * @param publishers the list of IPublisher instances that will be used to fetch and check input events
      */
-    public InputVerifier(List<IPublisher> publishers) {
+    public InputVerifier(List<IPublisher<?>> publishers) {
         this.publishers = publishers;
     }
 

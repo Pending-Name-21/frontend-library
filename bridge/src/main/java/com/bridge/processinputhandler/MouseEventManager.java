@@ -1,9 +1,7 @@
 package com.bridge.processinputhandler;
 
-import CoffeeTime.InputEvents.KeyboardEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import CoffeeTime.InputEvents.Event;
+import CoffeeTime.InputEvents.Mouse;
 
 /**
  * The KeyboardEventPublisher class implements the IPublisher interface
@@ -26,18 +24,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * publisher.publish();
  * </pre>
  */
-public class KeyboardEventPublisher implements IPublisher {
-    private final ConcurrentLinkedQueue<KeyboardEvent> buffer;
-    private final List<IKeyboardEventSubscriber> subscribers;
+public class MouseEventManager extends AEventManager<Mouse> {
 
     /**
      * Constructs a KeyboardEventPublisher with the specified event buffer.
      *
      * @param buffer the concurrent linked queue used to store keyboard events
      */
-    public KeyboardEventPublisher(ConcurrentLinkedQueue<KeyboardEvent> buffer) {
-        this.buffer = buffer;
-        subscribers = new ArrayList<>();
+    public MouseEventManager() {
+        super();
     }
 
     /**
@@ -45,7 +40,7 @@ public class KeyboardEventPublisher implements IPublisher {
      *
      * @param subscriber the subscriber implementing IKeyboardEventSubscriber
      */
-    public void subscribe(IKeyboardEventSubscriber subscriber) {
+    public void subscribe(IEventSubscriber<Mouse> subscriber) {
         subscribers.add(subscriber);
     }
 
@@ -59,8 +54,13 @@ public class KeyboardEventPublisher implements IPublisher {
     public void publish() {
         subscribers.forEach(
                 sub -> {
-                    buffer.forEach(sub::doNotify);
+                    events.forEach(sub::doNotify);
                 });
-        buffer.clear();
+        events.clear();
+    }
+
+    @Override
+    public void feed(Event event) {
+        events.add(event.mouse());
     }
 }
