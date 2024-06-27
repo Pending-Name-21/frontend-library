@@ -1,5 +1,7 @@
 package com.bridge.ipc;
 
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
+import com.bridge.renderHandler.render.RenderManager;
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
@@ -12,9 +14,11 @@ import java.nio.file.Path;
  * using Unix domain sockets.
  */
 public class SocketClient {
-    private SocketChannel channel;
     public static final Path NAMESPACE =
             Path.of(System.getProperty("java.io.tmpdir"), "events-socket.sock");
+
+    private SocketChannel channel;
+    private int failedWriteAttempts;
 
     /**
      * Constructs a new `SocketClient` instance connected to the specified namespace.
@@ -39,14 +43,26 @@ public class SocketClient {
      *
      * @param buffer The byte buffer containing the data to be sent.
      */
-    protected void send(ByteBuffer buffer) {
-        while (buffer.hasRemaining()) {
-            try {
-                channel.write(buffer);
-            } catch (IOException e) {
-                // TODO: handle error
-                e.printStackTrace();
+    protected void send(ByteBuffer buffer) throws RenderException {
+        if (channel.isConnected()) {
+            while (buffer.hasRemaining()) {
+                try {
+                    channel.write(buffer);
+                    failedWriteAttempts = 0;
+                } catch (IOException e) {
+                    // TODO: handle error
+                    e.printStackTrace();
+                }
             }
+        } else {
+            handleDisconnectedServer();
+        }
+    }
+
+    private void handleDisconnectedServer() throws RenderException {
+        failedWriteAttempts++;
+        if (failedWriteAttempts >= RenderManager.FRAMES_LOST_THRESHOLD) {
+            throw new RenderException("Reached frames lost threshold");
         }
     }
 }

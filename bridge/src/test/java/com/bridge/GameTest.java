@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.ipc.TransmitterTest;
@@ -16,7 +17,6 @@ import com.bridge.renderHandler.repository.SoundRepository;
 import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.updatehandler.UpdatePublisher;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class GameTest {
     }
 
     @BeforeAll
-    static void startServer(){
+    static void startServer() {
         SERVER_THREAD = TransmitterTest.startServer();
     }
 
@@ -80,7 +80,11 @@ class GameTest {
 
     @Test
     void testRender() {
-        game.render();
+        try {
+            game.render();
+        } catch (RenderException e) {
+            fail(e.getMessage(), e);
+        }
     }
 
     @Test

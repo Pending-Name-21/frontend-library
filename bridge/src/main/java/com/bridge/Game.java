@@ -1,6 +1,7 @@
 package com.bridge;
 
 import com.bridge.core.exceptions.GameException;
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.processinputhandler.InputVerifier;
@@ -63,7 +64,7 @@ public class Game {
     /**
      * Renders sprites and plays sounds
      */
-    public void render() {
+    public void render() throws RenderException {
         renderManager.render();
     }
 

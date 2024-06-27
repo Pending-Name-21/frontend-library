@@ -1,5 +1,6 @@
 package com.bridge.renderHandler.render;
 
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.ipc.SocketClient;
 import com.bridge.ipc.Transmitter;
 import com.bridge.renderHandler.repository.IRepository;
@@ -13,6 +14,7 @@ public class RenderManager {
     private final IRepository<Sprite> spriteRepository;
     private final IRepository<Sound> soundRepository;
     private final Transmitter transmitter;
+    public static int FRAMES_LOST_THRESHOLD = 60;
 
     /**
      * Constructs a RenderManager with the specified repositories and transmitter.
@@ -29,7 +31,7 @@ public class RenderManager {
     /**
      * Renders the sprites and sounds.
      */
-    public void render() {
+    public void render() throws RenderException {
         Frame frame = new Frame(spriteRepository.retrieve(), soundRepository.retrieve());
         transmitter.send(frame);
     }

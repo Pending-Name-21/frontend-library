@@ -84,7 +84,7 @@ class GameWithExceptionsTest {
                                 game.run();
                                 fail("GameException was expected");
                             } catch (GameException e) {
-                                assertTrue(e instanceof GameException);
+                                assertInstanceOf(GameException.class, e);
                                 assertThrows(GameException.class, game::run);
                             }
                         });
