@@ -74,5 +74,4 @@ public class Coord {
     public void setZ(int z) {
         this.z = z;
     }
-
 }
