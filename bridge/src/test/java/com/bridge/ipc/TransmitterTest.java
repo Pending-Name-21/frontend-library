@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 public class TransmitterTest {
     private static Thread SERVER_THREAD;
 
-    private static Thread startServer() {
+    public static Thread startServer() {
         return new Thread(
                 () -> {
                     UnixDomainSocketAddress socketAddress =
@@ -52,7 +52,7 @@ public class TransmitterTest {
                 });
     }
 
-    private static void cleanup() {
+    public static void cleanup() {
         try {
             Files.deleteIfExists(SocketClient.NAMESPACE);
         } catch (IOException e) {
