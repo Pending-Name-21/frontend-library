@@ -10,6 +10,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
 /**
@@ -17,16 +18,11 @@ import java.util.logging.Level;
  * and processes messages using a {@link Receiver}.
  */
 public class SocketServer implements Runnable {
-
-    /**
-     * The receiver responsible for handling incoming messages.
-     */
     private final Receiver receiver;
-
-    /**
-     * The path representing the namespace for the UNIX domain socket.
-     */
     private final Path namespace;
+    private final AtomicBoolean isServerRunning;
+    private static final Path NAMESPACE =
+            Path.of(System.getProperty("java.io.tmpdir"), "events-socket.sock");
 
     /**
      * Constructs a {@code SocketServer} with the specified receiver and namespace.
@@ -34,9 +30,10 @@ public class SocketServer implements Runnable {
      * @param receiver  the receiver to handle incoming messages
      * @param namespace the namespace for the UNIX domain socket
      */
-    public SocketServer(Receiver receiver, Path namespace) {
+    public SocketServer(Receiver receiver, Path namespace, AtomicBoolean isServerRunning) {
         this.receiver = receiver;
         this.namespace = namespace;
+        this.isServerRunning = isServerRunning;
     }
 
     /**
@@ -48,27 +45,29 @@ public class SocketServer implements Runnable {
         UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);
         try (ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
             server.bind(socketAddress);
-            LogHandler.log(Level.INFO, String.format("Listening on %s\n", namespace));
+            LogHandler.log(Level.INFO, String.format("Listening on %s", namespace));
             ByteBuffer buffer = ByteBuffer.allocate(1024);
-
-            boolean run = true;
-            while (run) {
+            server.configureBlocking(false);
+            while (isServerRunning.get()) {
                 try {
                     SocketChannel client = server.accept();
-                    buffer.clear();
-                    int bytesRead = client.read(buffer);
-                    if (bytesRead < 0) {
-                        LogHandler.log(Level.INFO, "Got empty message");
-                        continue;
+                    if (client != null) {
+                        buffer.clear();
+                        int bytesRead = client.read(buffer);
+                        if (bytesRead < 0) {
+                            LogHandler.log(Level.INFO, "Got empty message");
+                            continue;
+                        }
+                        buffer.rewind();
+                        receiver.handleMessage(buffer);
                     }
-                    buffer.rewind();
-                    receiver.handleMessage(buffer);
-                } catch (ClosedByInterruptException e) {
-                    flush();
-                    LogHandler.log(Level.INFO, "Closed connection");
-                    run = false;
+                    Thread.sleep(100);
+                } catch (ClosedByInterruptException | InterruptedException e) {
+                    LogHandler.log(Level.SEVERE, "SocketServer has been interrupted.");
                 }
             }
+            flush();
+            LogHandler.log(Level.INFO, "Stopped SocketServer");
 
         } catch (IOException e) {
             // TODO: Handle error
