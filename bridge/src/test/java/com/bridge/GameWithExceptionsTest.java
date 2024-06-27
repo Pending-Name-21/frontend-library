@@ -4,36 +4,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
-import com.bridge.core.exceptions.processinputhandler.NullInputListenersException;
 import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.processinputhandler.InputVerifier;
-import com.bridge.processinputhandler.ProcessInputPublisher;
-import com.bridge.processinputhandler.listeners.InputListener;
-import com.bridge.processinputhandler.listeners.MouseListener;
+import com.bridge.processinputhandler.KeyboardEventManager;
+import com.bridge.processinputhandler.MouseEventManager;
 import com.bridge.renderHandler.render.RenderManager;
 import com.bridge.updatehandler.UpdatePublisher;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GameWithExceptionsTest {
-    private ProcessInputPublisher processInputPublisher;
     private InputVerifier inputVerifier;
     private TestGameSettings gameSettings;
     private UpdatePublisher updatePublisher;
     private RenderManager renderManager;
     private GameInitializer gameInitializer;
-    private List<InputListener> inputListeners;
     private Game game;
 
     @BeforeEach
     void setUp() throws GameException {
-        processInputPublisher = new ProcessInputPublisher();
-        inputListeners = new ArrayList<>(List.of(new MouseListener()));
-        inputVerifier = new InputVerifier(processInputPublisher, inputListeners);
+        inputVerifier =
+                new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
         gameSettings = new TestGameSettings();
         updatePublisher = new UpdatePublisher();
         renderManager = new RenderManager();
@@ -72,15 +66,6 @@ class GameWithExceptionsTest {
             game.initialize();
         } catch (Exception e) {
             assertThrows(NotPossibleToNotifySubscribersException.class, game::run);
-        }
-    }
-
-    @Test
-    public void testInstanceInputVerifierWithException() {
-        try {
-            inputVerifier = new InputVerifier(processInputPublisher, null);
-            assertThrows(NullInputListenersException.class, game::run);
-        } catch (Exception e) {
         }
     }
 

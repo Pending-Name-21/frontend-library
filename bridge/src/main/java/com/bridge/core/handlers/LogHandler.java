@@ -13,7 +13,7 @@ public class LogHandler {
     /**
      * Logs a GameException at a specified level.
      *
-     * @param e the GameException to log
+     * @param e     the GameException to log
      * @param level the logging level
      */
     public static void log(GameException e, Level level) {
@@ -24,10 +24,14 @@ public class LogHandler {
      * Logs a message and a GameException at a specified level.
      *
      * @param message the message to log
-     * @param e the GameException to log
-     * @param level the logging level
+     * @param e       the GameException to log
+     * @param level   the logging level
      */
     public void log(String message, GameException e, Level level) {
         logger.log(level, message, e);
+    }
+
+    public static void log(Level level, String message) {
+        logger.log(level, message);
     }
 }
