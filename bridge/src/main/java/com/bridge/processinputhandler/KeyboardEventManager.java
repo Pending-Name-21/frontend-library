@@ -2,6 +2,8 @@ package com.bridge.processinputhandler;
 
 import CoffeeTime.InputEvents.Event;
 import CoffeeTime.InputEvents.Keyboard;
+import com.bridge.core.handlers.LogHandler;
+import java.util.logging.Level;
 
 /**
  * The KeyboardEventManager class extends AEventManager to manage and publish keyboard events
@@ -63,6 +65,11 @@ public class KeyboardEventManager extends AEventManager<Keyboard> {
      */
     @Override
     public void feed(Event event) {
-        events.add(event.keyboard());
+        Keyboard keyboard = event.keyboard();
+        if (keyboard != null) {
+            events.add(keyboard);
+        } else {
+            LogHandler.log(Level.WARNING, "Received keyboard event is null");
+        }
     }
 }

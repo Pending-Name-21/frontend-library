@@ -2,6 +2,8 @@ package com.bridge.processinputhandler;
 
 import CoffeeTime.InputEvents.Event;
 import CoffeeTime.InputEvents.Mouse;
+import com.bridge.core.handlers.LogHandler;
+import java.util.logging.Level;
 
 /**
  * The MouseEventManager class extends AEventManager to manage and publish mouse events
@@ -63,6 +65,11 @@ public class MouseEventManager extends AEventManager<Mouse> {
      */
     @Override
     public void feed(Event event) {
-        events.add(event.mouse());
+        Mouse mouse = event.mouse();
+        if (mouse != null) {
+            events.add(mouse);
+        } else {
+            LogHandler.log(Level.WARNING, "Received mouse event is null");
+        }
     }
 }
