@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
@@ -31,10 +32,9 @@ public class SocketServer implements Runnable {
      * @param receiver  the receiver to handle incoming messages
      * @param namespace the namespace for the UNIX domain socket
      */
-    public SocketServer(Receiver receiver, String namespace) {
+    public SocketServer(Receiver receiver, Path namespace) {
         this.receiver = receiver;
-        // TODO: validate the path
-        this.namespace = Path.of(System.getProperty("java.io.tmpdir"), namespace);
+        this.namespace = namespace;
     }
 
     /**
@@ -43,31 +43,36 @@ public class SocketServer implements Runnable {
      */
     @Override
     public void run() {
-        // TODO: handle thread interruption
         UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);
         try (ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
             server.bind(socketAddress);
             System.out.printf("Listening on %s\n", namespace);
             ByteBuffer buffer = ByteBuffer.allocate(1024);
 
-            while (true) {
-                SocketChannel client = server.accept();
-                buffer.clear();
-                int bytesRead = client.read(buffer);
-                if (bytesRead < 0) {
-                    System.out.print("Got empty message\n");
-                    return;
+            boolean run = true;
+            while (run) {
+                try {
+                    SocketChannel client = server.accept();
+                    buffer.clear();
+                    int bytesRead = client.read(buffer);
+                    if (bytesRead < 0) {
+                        System.out.print("Got empty message\n");
+                        continue;
+                    }
+                    buffer.rewind();
+                    receiver.handleMessage(buffer);
+                } catch (ClosedByInterruptException e) {
+                    flush();
+                    System.out.println("Closed connection");
+                    run = false;
                 }
-                buffer.rewind();
-                receiver.handleMessage(buffer);
             }
 
         } catch (IOException e) {
             // TODO: Handle error
             e.printStackTrace();
+            flush();
         }
-        System.out.println("Closed connection");
-        flush();
     }
 
     /**
