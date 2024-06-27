@@ -5,6 +5,7 @@ import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.file.Path;
 
 /**
  * This class provides a client-side connection for inter-process communication (IPC)
@@ -12,13 +13,15 @@ import java.nio.channels.SocketChannel;
  */
 public class SocketClient {
     private SocketChannel channel;
+    public static final Path NAMESPACE =
+            Path.of(System.getProperty("java.io.tmpdir"), "events-socket.sock");
 
     /**
      * Constructs a new `SocketClient` instance connected to the specified namespace.
      *
      * @param namespace The name of the Unix domain socket to connect to.
      */
-    public SocketClient(String namespace) {
+    public SocketClient(Path namespace) {
         try {
             channel = SocketChannel.open(StandardProtocolFamily.UNIX);
             UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);

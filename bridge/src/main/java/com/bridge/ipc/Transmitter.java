@@ -74,7 +74,7 @@ public class Transmitter {
      * @return The offset of the serialized Sound in the FlatBuffer.
      */
     private int handleSound(com.bridge.renderHandler.sound.Sound sound) {
-        int filePath = builder.createString(sound.getPath());
+        int filePath = builder.createString(sound.getPath().toString());
         return Sound.createSound(builder, sound.canPlay(), filePath);
     }
 
@@ -85,7 +85,7 @@ public class Transmitter {
      * @return The offset of the serialized Sprite in the FlatBuffer.
      */
     private int handleSprite(com.bridge.renderHandler.sprite.Sprite sprite) {
-        int filePath = builder.createString(sprite.getPath());
+        int filePath = builder.createString(sprite.getPath().toString());
         return Sprite.createSprite(
                 builder,
                 handlePosition(sprite.getPosition()),
@@ -100,7 +100,7 @@ public class Transmitter {
      * @param coord The Coord object to serialize.
      * @return The offset of the serialized Coord in the FlatBuffer.
      */
-    private int handlePosition(com.bridge.renderHandler.Coord coord) {
+    private int handlePosition(com.bridge.renderHandler.sprite.Coord coord) {
         return Coord.createCoord(builder, coord.getX(), coord.getY());
     }
 
@@ -110,7 +110,7 @@ public class Transmitter {
      * @param size The Size object to serialize.
      * @return The offset of the serialized Size in the FlatBuffer.
      */
-    private int handleSize(com.bridge.renderHandler.Size size) {
+    private int handleSize(com.bridge.renderHandler.sprite.Size size) {
         return Size.createSize(builder, size.getHeight(), size.getWidth());
     }
 }
