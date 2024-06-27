@@ -1,5 +1,6 @@
 package com.bridge.ipc;
 
+import com.bridge.core.handlers.LogHandler;
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
@@ -9,6 +10,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  * The {@code SocketServer} class implements a UNIX domain socket server that listens for incoming connections
@@ -46,7 +48,7 @@ public class SocketServer implements Runnable {
         UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);
         try (ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
             server.bind(socketAddress);
-            System.out.printf("Listening on %s\n", namespace);
+            LogHandler.log(Level.INFO, String.format("Listening on %s\n", namespace));
             ByteBuffer buffer = ByteBuffer.allocate(1024);
 
             boolean run = true;
@@ -56,14 +58,14 @@ public class SocketServer implements Runnable {
                     buffer.clear();
                     int bytesRead = client.read(buffer);
                     if (bytesRead < 0) {
-                        System.out.print("Got empty message\n");
+                        LogHandler.log(Level.INFO, "Got empty message");
                         continue;
                     }
                     buffer.rewind();
                     receiver.handleMessage(buffer);
                 } catch (ClosedByInterruptException e) {
                     flush();
-                    System.out.println("Closed connection");
+                    LogHandler.log(Level.INFO, "Closed connection");
                     run = false;
                 }
             }
@@ -82,8 +84,11 @@ public class SocketServer implements Runnable {
         try {
             Files.deleteIfExists(namespace);
         } catch (IOException e) {
-            // TODO: Handle error
-            e.printStackTrace();
+            LogHandler.log(
+                    Level.WARNING,
+                    String.format(
+                            "Could not remove namespace: %s\nBecause of %s",
+                            namespace, e.getMessage()));
         }
     }
 }
