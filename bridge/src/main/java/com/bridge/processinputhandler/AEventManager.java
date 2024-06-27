@@ -32,4 +32,8 @@ public abstract class AEventManager<T> implements IPublisher<T>, IEventBuffer {
         this.events = new ConcurrentLinkedQueue<>();
         this.subscribers = new ArrayList<>();
     }
+
+    public ConcurrentLinkedQueue<T> getEvents() {
+        return events;
+    }
 }
