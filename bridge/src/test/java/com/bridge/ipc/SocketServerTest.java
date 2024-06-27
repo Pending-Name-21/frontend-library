@@ -245,4 +245,35 @@ class SocketServerTest {
             }
         }
     }
+
+    @Test
+    void verifyServerCleansNamespace() {
+        try {
+            Files.deleteIfExists(NAMESPACE);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Failed to delete existing namespace file: " + e.getMessage());
+        }
+
+        Receiver receiver = new Receiver();
+        SocketServer socketServer = new SocketServer(receiver, NAMESPACE);
+        Thread thread = new Thread(socketServer);
+        thread.start();
+        while (!Files.exists(NAMESPACE)) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                fail("Test interrupted while waiting for server to initialize: " + e.getMessage());
+            }
+        }
+
+        thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail("Failed to join server thread: " + e.getMessage());
+        }
+        assertFalse(Files.exists(NAMESPACE));
+    }
 }
