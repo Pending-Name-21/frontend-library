@@ -43,4 +43,22 @@ public class EventGenerator {
         builder.finish(eventOffset);
         return builder.dataBuffer();
     }
+
+    public ByteBuffer makeMouseOnlyEvent() {
+        int mouseOffset = mouseGenerator("MousePressed", "Left");
+        Event.startEvent(builder);
+        Event.addMouse(builder, mouseOffset);
+        int eventOffset = Event.endEvent(builder);
+        builder.finish(eventOffset);
+        return builder.dataBuffer();
+    }
+
+    public ByteBuffer makeKeyboardOnlyEvent() {
+        int keyboardOffset = keyboardGenerator("KeyPressed", "Return");
+        Event.startEvent(builder);
+        Event.addKeyboard(builder, keyboardOffset);
+        int eventOffset = Event.endEvent(builder);
+        builder.finish(eventOffset);
+        return builder.dataBuffer();
+    }
 }
