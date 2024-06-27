@@ -7,6 +7,7 @@ public class Coord {
 
     private int x;
     private int y;
+    private int z;
 
     /**
      * Constructor that initializes a coordinate.
@@ -14,9 +15,10 @@ public class Coord {
      * @param x the x-coordinate
      * @param y the y-coordinate
      */
-    public Coord(int x, int y) {
+    public Coord(int x, int y, int z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
     /**
@@ -54,4 +56,23 @@ public class Coord {
     public void setY(int y) {
         this.y = y;
     }
+
+    /**
+     * Gets the z-coordinate.
+     *
+     * @return the z-coordinate
+     */
+    public int getZ() {
+        return z;
+    }
+
+    /**
+     * Sets the z-coordinate.
+     *
+     * @param z the new y-coordinate
+     */
+    public void setZ(int z) {
+        this.z = z;
+    }
+
 }

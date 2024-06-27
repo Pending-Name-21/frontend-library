@@ -24,7 +24,7 @@ class SpriteBuilderTest {
     @Test
     void testBuildSprite() throws NonExistentFilePathException, IOException {
         SpriteBuilder builder = new SpriteBuilder(spriteRepository);
-        builder.buildCoord(10, 20).buildSize(50.5, 75.5).buildPath(existingFilePath.toString());
+        builder.buildCoord(10, 20,0).buildSize(50.5, 75.5).buildPath(existingFilePath.toString());
         Sprite sprite = builder.assemble();
 
         assertNotNull(sprite);

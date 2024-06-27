@@ -2,6 +2,7 @@ package com.bridge.renderHandler.repository;
 
 import com.bridge.renderHandler.sprite.Sprite;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -20,10 +21,16 @@ public class SpriteRepository implements IRepository<Sprite> {
      * @param sprite the item to add.
      */
     @Override
-    public void add(Sprite sprite) {
-        sprites.add(sprite);
+    public void add( Sprite sprite) {
+        sprites.add(sprite.getPosition().getZ(),sprite);
     }
 
+    /**
+     * Updates all Z-cords changes in the Sprites.
+     */
+    public void updateZ(){
+        sprites.sort(Comparator.comparingInt(s -> s.getPosition().getZ()));
+    }
     /**
      * Retrieves only visible sprites from the repository.
      *

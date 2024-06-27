@@ -10,7 +10,7 @@ class CoordTest {
 
     @BeforeEach
     void setUp() {
-        coord = new Coord(5, 10);
+        coord = new Coord(5, 10,0);
     }
 
     @Test

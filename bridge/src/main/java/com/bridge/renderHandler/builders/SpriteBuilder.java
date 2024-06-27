@@ -35,8 +35,8 @@ public class SpriteBuilder {
      * @param y the y-coordinate.
      * @return the current instance of SpriteBuilder.
      */
-    public SpriteBuilder buildCoord(int x, int y) {
-        coord = new Coord(x, y);
+    public SpriteBuilder buildCoord(int x, int y, int z) {
+        coord = new Coord(x, y, z);
         return this;
     }
 

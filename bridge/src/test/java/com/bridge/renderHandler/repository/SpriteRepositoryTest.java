@@ -14,16 +14,25 @@ class SpriteRepositoryTest {
     void testAddAndRetrieveSprites() {
         SpriteRepository repository = new SpriteRepository();
         Sprite sprite1 =
-                new Sprite(new Coord(10, 20), new Size(50.5, 75.5), Paths.get("sprite1.png"));
+                new Sprite(new Coord(10, 20,0), new Size(50.5, 75.5), Paths.get("sprite1.png"));
         Sprite sprite2 =
-                new Sprite(new Coord(30, 40), new Size(60.5, 85.5), Paths.get("sprite2.png"));
+                new Sprite(new Coord(30, 40,1), new Size(60.5, 85.5), Paths.get("sprite2.png"));
+        Sprite sprite3 =
+                new Sprite(new Coord(30, 40,2), new Size(60.5, 85.5), Paths.get("sprite3.png"));
 
         repository.add(sprite1);
         repository.add(sprite2);
+        repository.add(sprite3);
+
+        sprite1.getPosition().setZ(2);
+        sprite2.getPosition().setZ(1);
+        sprite3.getPosition().setZ(0);
+
+        repository.updateZ();
 
         List<Sprite> sprites = repository.retrieve();
-        assertEquals(2, sprites.size());
-        assertEquals(sprite1, sprites.get(0));
+        assertEquals(3, sprites.size());
+        assertEquals(sprite1, sprites.get(2));
         assertEquals(sprite2, sprites.get(1));
     }
 }
