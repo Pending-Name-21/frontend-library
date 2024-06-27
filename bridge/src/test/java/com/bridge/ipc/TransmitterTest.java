@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,13 @@ import org.junit.jupiter.api.Test;
 
 public class TransmitterTest {
     private static Thread SERVER_THREAD;
+    public static final Path NAMESPACE =
+            Path.of(System.getProperty("java.io.tmpdir"), "test_socket_console");
 
     public static Thread startServer() {
         return new Thread(
                 () -> {
-                    UnixDomainSocketAddress socketAddress =
-                            UnixDomainSocketAddress.of(SocketClient.NAMESPACE);
+                    UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(NAMESPACE);
                     try (ServerSocketChannel server =
                             ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
                         server.bind(socketAddress);
@@ -41,23 +43,20 @@ public class TransmitterTest {
                                 if (Thread.currentThread().isInterrupted()) {
                                     break;
                                 }
-                                e.printStackTrace();
-                                fail("Server failed to accept connection: " + e.getMessage());
+                                fail("Server failed to accept connection", e);
                             }
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
-                        fail("Server failed to start: " + e.getMessage());
+                        fail("Server failed to start", e);
                     }
                 });
     }
 
     public static void cleanup() {
         try {
-            Files.deleteIfExists(SocketClient.NAMESPACE);
+            Files.deleteIfExists(NAMESPACE);
         } catch (IOException e) {
-            e.printStackTrace();
-            fail("Failed to delete namespace file: " + e.getMessage());
+            fail("Failed to delete namespace file", e);
         }
     }
 
@@ -66,12 +65,11 @@ public class TransmitterTest {
         cleanup();
         SERVER_THREAD = startServer();
         SERVER_THREAD.start();
-        while (!Files.exists(SocketClient.NAMESPACE)) {
+        while (!Files.exists(NAMESPACE)) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                fail("Test interrupted while waiting for server to initialize");
-                e.printStackTrace();
+                fail("Test interrupted while waiting for server to initialize", e);
             }
         }
     }
@@ -82,21 +80,19 @@ public class TransmitterTest {
         try {
             SERVER_THREAD.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            fail("Failed to join server thread");
+            fail("Failed to join server thread", e);
         }
         cleanup();
     }
 
     private static void sendFrame(List<Sprite> sprites, List<Sound> sounds) {
         try {
-            SocketClient socketClient = new SocketClient(SocketClient.NAMESPACE);
+            SocketClient socketClient = new SocketClient(NAMESPACE);
             Transmitter transmitter = new Transmitter(socketClient);
             Frame frame = new Frame(sprites, sounds);
             transmitter.send(frame);
         } catch (Exception e) {
-            e.printStackTrace();
-            fail("Exception occurred");
+            fail("Exception occurred", e);
         }
     }
 

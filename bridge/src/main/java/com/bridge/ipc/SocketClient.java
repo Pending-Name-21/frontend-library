@@ -15,7 +15,7 @@ import java.nio.file.Path;
  */
 public class SocketClient {
     public static final Path NAMESPACE =
-            Path.of(System.getProperty("java.io.tmpdir"), "events-socket.sock");
+            Path.of(System.getProperty("java.io.tmpdir"), "socket_console");
 
     private SocketChannel channel;
     private int failedWriteAttempts;
