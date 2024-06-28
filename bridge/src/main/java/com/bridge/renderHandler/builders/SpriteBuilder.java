@@ -35,8 +35,8 @@ public class SpriteBuilder {
      * @param y the y-coordinate.
      * @return the current instance of SpriteBuilder.
      */
-    public SpriteBuilder buildCoord(int x, int y, int z) {
-        coord = new Coord(x, y, z);
+    public SpriteBuilder buildCoord(int x, int y) {
+        coord = new Coord(x, y);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class SpriteBuilder {
      * @return the assembled Sprite.
      */
     public Sprite assemble() {
-        Sprite sprite = new Sprite(coord, size, filePath);
+        Sprite sprite = new Sprite(coord, 0, size, filePath);
         spriteRepository.add(sprite);
         return sprite;
     }

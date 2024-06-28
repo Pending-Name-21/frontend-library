@@ -22,14 +22,14 @@ public class SpriteRepository implements IRepository<Sprite> {
      */
     @Override
     public void add(Sprite sprite) {
-        sprites.add(sprite.getPosition().getZ(), sprite);
+        sprites.add(sprite.getZ_index(), sprite);
     }
 
     /**
      * Updates all Z-cords changes in the Sprites.
      */
     public void updateZ() {
-        sprites.sort(Comparator.comparingInt(s -> s.getPosition().getZ()));
+        sprites.sort(Comparator.comparingInt(s -> s.getZ_index()));
     }
 
     /**
