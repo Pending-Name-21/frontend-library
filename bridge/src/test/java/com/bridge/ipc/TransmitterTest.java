@@ -100,7 +100,7 @@ public class TransmitterTest {
     void sendASprite() {
         Coord position = new Coord(10, 20);
         Size size = new Size(50.5, 75.5);
-        Sprite sprite = new Sprite(position,0, size, Paths.get("sprite.jpg"));
+        Sprite sprite = new Sprite(position, 0, size, Paths.get("sprite.jpg"));
         sendFrame(List.of(sprite), new ArrayList<>());
     }
 
@@ -114,7 +114,7 @@ public class TransmitterTest {
     void sendCompleteFrame() {
         Coord position = new Coord(10, 20);
         Size size = new Size(50.5, 75.5);
-        Sprite sprite = new Sprite(position,0, size, Paths.get("sprite.jpg"));
+        Sprite sprite = new Sprite(position, 0, size, Paths.get("sprite.jpg"));
         Sound sound = new Sound(Paths.get("sound.wav"));
         sendFrame(List.of(sprite), List.of(sound));
     }
