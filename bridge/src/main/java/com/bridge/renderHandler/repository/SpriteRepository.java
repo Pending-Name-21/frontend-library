@@ -26,19 +26,13 @@ public class SpriteRepository implements IRepository<Sprite> {
     }
 
     /**
-     * Updates all Z-cords changes in the Sprites.
-     */
-    public void updateZ() {
-        sprites.sort(Comparator.comparingInt(s -> s.getZ_index()));
-    }
-
-    /**
      * Retrieves only visible sprites from the repository.
      *
      * @return a list of visible sprites from the repository.
      */
     @Override
     public List<Sprite> retrieve() {
+        sprites.sort(Comparator.comparingInt(s -> s.getZ_index()));
         return sprites.stream().filter(sprite -> !sprite.isHidden()).toList();
     }
 }

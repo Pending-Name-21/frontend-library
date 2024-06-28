@@ -37,7 +37,6 @@ class SpriteRepositoryTest {
         assertEquals(1, sprites.get(1).getZ_index());
         assertEquals(2, sprites.get(0).getZ_index());
 
-        repository.updateZ();
         sprites = repository.retrieve();
 
         assertEquals(3, sprites.size());
