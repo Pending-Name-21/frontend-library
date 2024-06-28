@@ -11,6 +11,8 @@ import com.bridge.processinputhandler.InputVerifier;
 import com.bridge.processinputhandler.KeyboardEventManager;
 import com.bridge.processinputhandler.MouseEventManager;
 import com.bridge.renderHandler.render.RenderManager;
+import com.bridge.renderHandler.repository.SoundRepository;
+import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.updatehandler.UpdatePublisher;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +32,7 @@ class GameWithExceptionsTest {
                 new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
         gameSettings = new TestGameSettings();
         updatePublisher = new UpdatePublisher();
-        renderManager = new RenderManager();
+        renderManager = new RenderManager(new SpriteRepository(), new SoundRepository());
         gameInitializer = new GameInitializer();
         game =
                 new Game(
@@ -82,7 +84,7 @@ class GameWithExceptionsTest {
                                 game.run();
                                 fail("GameException was expected");
                             } catch (GameException e) {
-                                assertTrue(e instanceof GameException);
+                                assertInstanceOf(GameException.class, e);
                                 assertThrows(GameException.class, game::run);
                             }
                         });

@@ -5,14 +5,20 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
+import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
+import com.bridge.ipc.TransmitterTest;
 import com.bridge.processinputhandler.InputVerifier;
 import com.bridge.processinputhandler.KeyboardEventManager;
 import com.bridge.processinputhandler.MouseEventManager;
 import com.bridge.renderHandler.render.RenderManager;
+import com.bridge.renderHandler.repository.SoundRepository;
+import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.updatehandler.UpdatePublisher;
 import java.util.List;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,13 +30,15 @@ class GameTest {
     private TestGameInitializer gameInitializer;
     private Game game;
 
+    private static Thread SERVER_THREAD;
+
     @BeforeEach
     void setUp() throws GameException {
         inputVerifier =
                 new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
         gameSettings = new TestGameSettings();
         updatePublisher = new TestUpdatePublisher();
-        renderManager = new RenderManager();
+        renderManager = new RenderManager(new SpriteRepository(), new SoundRepository());
         gameInitializer = new TestGameInitializer();
         game =
                 new Game(
@@ -39,6 +47,23 @@ class GameTest {
                         updatePublisher,
                         renderManager,
                         gameInitializer);
+    }
+
+    @BeforeAll
+    static void startServer() {
+        SERVER_THREAD = TransmitterTest.startServer();
+    }
+
+    @AfterAll
+    static void stopServer() {
+        SERVER_THREAD.interrupt();
+        try {
+            SERVER_THREAD.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail("Failed to join server thread");
+        }
+        TransmitterTest.cleanup();
     }
 
     @Test
@@ -55,7 +80,11 @@ class GameTest {
 
     @Test
     void testRender() {
-        game.render();
+        try {
+            game.render();
+        } catch (RenderException e) {
+            fail(e.getMessage(), e);
+        }
     }
 
     @Test
