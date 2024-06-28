@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
 
@@ -51,15 +52,20 @@ class SocketServerTest {
         }
     }
 
+    public static Receiver makeReceiver(KeyboardEventManager keyboardEventManager, MouseEventManager mouseEventManager){
+        Receiver receiver = new Receiver();
+        receiver.addBuffer(keyboardEventManager);
+        receiver.addBuffer(mouseEventManager);
+        return receiver;
+    }
+
+
     @Test
     void checkCompleteEventIsReceived() {
         KeyboardEventManager keyboardEventManager = new KeyboardEventManager();
         MouseEventManager mouseEventManager = new MouseEventManager();
-        Receiver receiver = new Receiver();
-        receiver.addBuffer(keyboardEventManager);
-        receiver.addBuffer(mouseEventManager);
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
-        Thread thread = startServer(receiver, atomicBoolean);
+        Thread thread = startServer(makeReceiver(keyboardEventManager, mouseEventManager), atomicBoolean);
 
         sendToServer(new EventGenerator().makeEvent());
         for (int i = 0; i < 3; i++) {
@@ -75,7 +81,10 @@ class SocketServerTest {
 
         atomicBoolean.set(false);
         try {
-            thread.join();
+            thread.join(100);
+            if (thread.isAlive()){
+                thread.interrupt();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Failed to join server thread: " + e.getMessage());
@@ -89,11 +98,8 @@ class SocketServerTest {
     void checkSocketHandlesEmptyBuffer() {
         KeyboardEventManager keyboardEventManager = new KeyboardEventManager();
         MouseEventManager mouseEventManager = new MouseEventManager();
-        Receiver receiver = new Receiver();
-        receiver.addBuffer(keyboardEventManager);
-        receiver.addBuffer(mouseEventManager);
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
-        Thread thread = startServer(receiver, atomicBoolean);
+        Thread thread = startServer(makeReceiver(keyboardEventManager, mouseEventManager), atomicBoolean);
 
         sendToServer(ByteBuffer.allocate(0));
         for (int i = 0; i < 3; i++) {
@@ -108,7 +114,10 @@ class SocketServerTest {
 
         atomicBoolean.set(false);
         try {
-            thread.join();
+            thread.join(100);
+            if (thread.isAlive()){
+                thread.interrupt();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Failed to join server thread: " + e.getMessage());
@@ -122,11 +131,8 @@ class SocketServerTest {
     void checkOnlyKeyboardEvent() {
         KeyboardEventManager keyboardEventManager = new KeyboardEventManager();
         MouseEventManager mouseEventManager = new MouseEventManager();
-        Receiver receiver = new Receiver();
-        receiver.addBuffer(keyboardEventManager);
-        receiver.addBuffer(mouseEventManager);
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
-        Thread thread = startServer(receiver, atomicBoolean);
+        Thread thread = startServer(makeReceiver(keyboardEventManager, mouseEventManager), atomicBoolean);
 
         sendToServer(new EventGenerator().makeKeyboardOnlyEvent());
         for (int i = 0; i < 3; i++) {
@@ -141,7 +147,10 @@ class SocketServerTest {
 
         atomicBoolean.set(false);
         try {
-            thread.join();
+            thread.join(100);
+            if (thread.isAlive()){
+                thread.interrupt();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Failed to join server thread: " + e.getMessage());
@@ -154,13 +163,10 @@ class SocketServerTest {
     void checkOnlyMouseEvent() {
         KeyboardEventManager keyboardEventManager = new KeyboardEventManager();
         MouseEventManager mouseEventManager = new MouseEventManager();
-        Receiver receiver = new Receiver();
-        receiver.addBuffer(keyboardEventManager);
-        receiver.addBuffer(mouseEventManager);
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
-        Thread thread = startServer(receiver, atomicBoolean);
-        sendToServer(new EventGenerator().makeMouseOnlyEvent());
+        Thread thread = startServer(makeReceiver(keyboardEventManager, mouseEventManager), atomicBoolean);
 
+        sendToServer(new EventGenerator().makeMouseOnlyEvent());
         for (int i = 0; i < 3; i++) {
             if (mouseEventManager.getEvents().isEmpty()) {
                 try {
@@ -173,7 +179,10 @@ class SocketServerTest {
 
         atomicBoolean.set(false);
         try {
-            thread.join();
+            thread.join(100);
+            if (thread.isAlive()){
+                thread.interrupt();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Failed to join server thread: " + e.getMessage());
@@ -190,7 +199,10 @@ class SocketServerTest {
 
         atomicBoolean.set(false);
         try {
-            thread.join();
+            thread.join(100);
+            if (thread.isAlive()){
+                thread.interrupt();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Failed to join server thread: " + e.getMessage());
