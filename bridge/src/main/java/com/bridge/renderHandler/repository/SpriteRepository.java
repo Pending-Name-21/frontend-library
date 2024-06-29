@@ -21,7 +21,9 @@ public class SpriteRepository implements IRepository<Sprite> {
      * @param sprite the item to add.
      */
     @Override
-    public void add(Sprite sprite) {sprites.add(sprite);}
+    public void add(Sprite sprite) {
+        sprites.add(sprite);
+    }
 
     /**
      * Retrieves only visible sprites from the repository.
