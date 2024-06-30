@@ -11,6 +11,7 @@ public class Sprite implements IFile {
     private Size size;
     private boolean isHidden;
     private final Path path;
+    private int z_index;
 
     /**
      * Constructs a Sprite with specified position, size, and path.
@@ -19,8 +20,9 @@ public class Sprite implements IFile {
      * @param size the size of the sprite.
      * @param path the file path of the sprite image.
      */
-    public Sprite(Coord position, Size size, Path path) {
+    public Sprite(Coord position, int z_index, Size size, Path path) {
         this.position = position;
+        this.z_index = z_index;
         this.size = size;
         this.path = path;
         this.isHidden = false;
@@ -60,6 +62,24 @@ public class Sprite implements IFile {
      */
     public void setSize(Size size) {
         this.size = size;
+    }
+
+    /**
+     * Gets the size of the sprite.
+     *
+     * @return the size of the sprite
+     */
+    public int getZ_index() {
+        return z_index;
+    }
+
+    /**
+     * Sets the size of the sprite.
+     *
+     * @param z_index the new size of the sprite
+     */
+    public void setZ_index(int z_index) {
+        this.z_index = z_index;
     }
 
     /**

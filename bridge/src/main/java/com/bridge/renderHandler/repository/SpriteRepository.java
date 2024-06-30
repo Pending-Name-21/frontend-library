@@ -2,6 +2,7 @@ package com.bridge.renderHandler.repository;
 
 import com.bridge.renderHandler.sprite.Sprite;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class SpriteRepository implements IRepository<Sprite> {
      */
     @Override
     public List<Sprite> retrieve() {
+        sprites.sort(Comparator.comparingInt(s -> s.getZ_index()));
         return sprites.stream().filter(sprite -> !sprite.isHidden()).toList();
     }
 }

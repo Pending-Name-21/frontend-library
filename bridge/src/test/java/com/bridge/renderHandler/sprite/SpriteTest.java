@@ -10,7 +10,7 @@ class SpriteTest {
     void testSpriteCreation() {
         Coord position = new Coord(10, 20);
         Size size = new Size(50.5, 75.5);
-        Sprite sprite = new Sprite(position, size, Paths.get("sprite.jpg"));
+        Sprite sprite = new Sprite(position, 0, size, Paths.get("sprite.jpg"));
 
         assertEquals(position, sprite.getPosition());
         assertEquals(size, sprite.getSize());
@@ -21,7 +21,7 @@ class SpriteTest {
     @Test
     void testSetHidden() {
         Sprite sprite =
-                new Sprite(new Coord(10, 20), new Size(50.5, 75.5), Paths.get("sprite.png"));
+                new Sprite(new Coord(10, 20), 0, new Size(50.5, 75.5), Paths.get("sprite.png"));
         sprite.setHidden(true);
         assertTrue(sprite.isHidden());
     }

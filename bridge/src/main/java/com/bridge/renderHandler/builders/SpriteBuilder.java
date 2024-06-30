@@ -69,7 +69,7 @@ public class SpriteBuilder {
      * @return the assembled Sprite.
      */
     public Sprite assemble() {
-        Sprite sprite = new Sprite(coord, size, filePath);
+        Sprite sprite = new Sprite(coord, 0, size, filePath);
         spriteRepository.add(sprite);
         return sprite;
     }
