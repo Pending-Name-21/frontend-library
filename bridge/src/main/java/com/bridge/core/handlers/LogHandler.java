@@ -34,4 +34,8 @@ public class LogHandler {
     public static void log(Level level, String message) {
         logger.log(level, message);
     }
+
+    public static void log(Level level, String message, Throwable e) {
+        logger.log(level, message, e);
+    }
 }
