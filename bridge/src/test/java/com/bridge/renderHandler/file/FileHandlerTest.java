@@ -51,4 +51,16 @@ class FileHandlerTest {
                 NonExistentFilePathException.class,
                 () -> fileHandler.getFilePath("nonexistentFile.txt"));
     }
+
+    @Test
+    void testFileInResources() {
+        FileHandler fileHandler = new FileHandler();
+        try {
+            Path path = fileHandler.getFilePath("this-file.txt");
+            assertNotNull(path);
+            assertTrue(fileHandler.pathExists(path));
+        } catch (NonExistentFilePathException e) {
+            fail(e);
+        }
+    }
 }
