@@ -2,6 +2,7 @@ package com.bridge;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
+import com.bridge.extras.SplashScreen;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.processinputhandler.InputVerifier;
@@ -17,6 +18,8 @@ public class Game {
     private UpdatePublisher updatePublisher;
     private RenderManager renderManager;
     private GameInitializer gameInitializer;
+    private SplashScreen splashScreen;
+    private int framesCount;
 
     /**
      * Constructs a Game with the specified input verifier.
@@ -32,7 +35,9 @@ public class Game {
             AGameSettings gameSettings,
             UpdatePublisher updatePublisher,
             RenderManager renderManager,
-            GameInitializer gameInitializer) {
+            GameInitializer gameInitializer) throws GameException {
+        splashScreen = new SplashScreen(framesCount);
+        updatePublisher.subscribe(splashScreen);
         this.inputVerifier = inputVerifier;
         this.gameSettings = gameSettings;
         this.updatePublisher = updatePublisher;
@@ -44,6 +49,7 @@ public class Game {
      * Initializes game subscribers initializers.
      */
     public void initialize() throws GameException {
+        gameInitializer.subscribe(splashScreen);
         gameInitializer.initializeSubscribers();
     }
 
@@ -69,6 +75,14 @@ public class Game {
     }
 
     /**
+     * Gets the current frames count
+     * @return the frames count
+     */
+    public int getFramesCount() {
+        return framesCount;
+    }
+
+    /**
      * Runs the main game loop.
      */
     public void run() throws GameException {
@@ -78,6 +92,7 @@ public class Game {
             update();
             render();
             Thread.yield();
+            framesCount++;
         }
     }
 }
