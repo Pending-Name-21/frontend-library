@@ -35,7 +35,8 @@ public class Game {
             AGameSettings gameSettings,
             UpdatePublisher updatePublisher,
             RenderManager renderManager,
-            GameInitializer gameInitializer) throws GameException {
+            GameInitializer gameInitializer)
+            throws GameException {
         splashScreen = new SplashScreen(framesCount);
         updatePublisher.subscribe(splashScreen);
         this.inputVerifier = inputVerifier;
