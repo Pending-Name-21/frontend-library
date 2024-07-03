@@ -12,7 +12,7 @@ public class RenderManagerTest {
     @Test
     void checkExceptionOnDisconnectedServer() {
         RenderManager renderManager =
-                new RenderManager(new SpriteRepository(), new SoundRepository());
+                new RenderManager();
         for (int i = 0; i < 60; i++) {
             try {
                 renderManager.render();

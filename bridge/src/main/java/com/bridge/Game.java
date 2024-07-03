@@ -4,46 +4,65 @@ import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
+import com.bridge.ipc.Receiver;
+import com.bridge.ipc.SocketServer;
 import com.bridge.processinputhandler.InputVerifier;
+import com.bridge.processinputhandler.KeyboardEventManager;
+import com.bridge.processinputhandler.MouseEventManager;
 import com.bridge.renderHandler.render.RenderManager;
+import com.bridge.renderHandler.repository.IRepository;
+import com.bridge.renderHandler.sound.Sound;
+import com.bridge.renderHandler.sprite.Sprite;
 import com.bridge.updatehandler.UpdatePublisher;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Main game loop class.
  */
 public class Game {
-    private InputVerifier inputVerifier;
-    private AGameSettings gameSettings;
-    private UpdatePublisher updatePublisher;
-    private RenderManager renderManager;
-    private GameInitializer gameInitializer;
+    private final InputVerifier inputVerifier;
+    private final AGameSettings gameSettings;
+    private final UpdatePublisher updatePublisher;
+    private final RenderManager renderManager;
+    private final GameInitializer gameInitializer;
+
+    private final AtomicBoolean atomicBoolean;
+    private final KeyboardEventManager keyboardEventManager;
+    private final MouseEventManager mouseEventManager;
+    private final SocketServer socketServer;
+
 
     /**
      * Constructs a Game with the specified input verifier.
      *
-     * @param inputVerifier the input verifier to handle input events
      * @param gameSettings the game settings to use
-     * @param updatePublisher the update publisher to handle updates notifiers
-     * @param renderManager the render manager to manage sprites and sound
-     * @param gameInitializer the game initializer to handle game initializers
      */
     public Game(
-            InputVerifier inputVerifier,
-            AGameSettings gameSettings,
-            UpdatePublisher updatePublisher,
-            RenderManager renderManager,
-            GameInitializer gameInitializer) {
-        this.inputVerifier = inputVerifier;
+            AGameSettings gameSettings) {
         this.gameSettings = gameSettings;
-        this.updatePublisher = updatePublisher;
-        this.renderManager = renderManager;
-        this.gameInitializer = gameInitializer;
+        this.updatePublisher = new UpdatePublisher();
+        this.gameInitializer = new GameInitializer();
+
+        atomicBoolean = new AtomicBoolean();
+        keyboardEventManager = new KeyboardEventManager();
+        mouseEventManager = new MouseEventManager();
+        Receiver receiver = new Receiver();
+        receiver.addBuffer(keyboardEventManager);
+        receiver.addBuffer(mouseEventManager);
+        socketServer = new SocketServer(new Receiver(), SocketServer.NAMESPACE, atomicBoolean);
+
+        inputVerifier = new InputVerifier(List.of(keyboardEventManager, mouseEventManager));
+        renderManager = new RenderManager();
     }
 
     /**
      * Initializes game subscribers initializers.
      */
     public void initialize() throws GameException {
+        Thread thread = new Thread(socketServer);
+        thread.start();
         gameInitializer.initializeSubscribers();
     }
 
@@ -79,5 +98,30 @@ public class Game {
             render();
             Thread.yield();
         }
+        atomicBoolean.set(false);
+    }
+
+    public KeyboardEventManager getKeyboardEventManager() {
+        return keyboardEventManager;
+    }
+
+    public MouseEventManager getMouseEventManager() {
+        return mouseEventManager;
+    }
+
+    public IRepository<Sound> getSoundIRepository() {
+        return renderManager.getSoundIRepository();
+    }
+
+    public IRepository<Sprite> getSpriteIRepository() {
+        return renderManager.getSpriteIRepository();
+    }
+
+    public UpdatePublisher getUpdatePublisher() {
+        return updatePublisher;
+    }
+
+    public GameInitializer getGameInitializer() {
+        return gameInitializer;
     }
 }
