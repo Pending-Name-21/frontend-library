@@ -18,7 +18,7 @@ import java.util.logging.Level;
  * and processes messages using a {@link Receiver}.
  */
 public class SocketServer implements Runnable {
-    private static final Path NAMESPACE =
+    public static final Path NAMESPACE =
             Path.of(System.getProperty("java.io.tmpdir"), "events-socket.sock");
     private final Receiver receiver;
     private final Path namespace;

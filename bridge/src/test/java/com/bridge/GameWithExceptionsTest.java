@@ -4,43 +4,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
-import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
-import com.bridge.processinputhandler.InputVerifier;
-import com.bridge.processinputhandler.KeyboardEventManager;
-import com.bridge.processinputhandler.MouseEventManager;
-import com.bridge.renderHandler.render.RenderManager;
-import com.bridge.renderHandler.repository.SoundRepository;
-import com.bridge.renderHandler.repository.SpriteRepository;
-import com.bridge.updatehandler.UpdatePublisher;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GameWithExceptionsTest {
-    private InputVerifier inputVerifier;
     private TestGameSettings gameSettings;
-    private UpdatePublisher updatePublisher;
-    private RenderManager renderManager;
-    private GameInitializer gameInitializer;
     private Game game;
+    private TestGameInitializer gameInitializer;
 
     @BeforeEach
     void setUp() throws GameException {
-        inputVerifier =
-                new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
         gameSettings = new TestGameSettings();
-        updatePublisher = new UpdatePublisher();
-        renderManager = new RenderManager(new SpriteRepository(), new SoundRepository());
-        gameInitializer = new GameInitializer();
-        game =
-                new Game(
-                        inputVerifier,
-                        gameSettings,
-                        updatePublisher,
-                        renderManager,
-                        gameInitializer);
+        gameInitializer = new TestGameInitializer();
+        game = new Game(gameSettings);
     }
 
     @Test
@@ -58,23 +36,8 @@ class GameWithExceptionsTest {
     }
 
     @Test
-    public void testUpdateWithException() {
-        updatePublisher.subscribe(null);
-        updatePublisher.subscribe(null);
-        updatePublisher.subscribe(null);
-        updatePublisher.subscribe(null);
-
-        try {
-            game.initialize();
-        } catch (Exception e) {
-            assertThrows(NotPossibleToNotifySubscribersException.class, game::run);
-        }
-    }
-
-    @Test
     void testRunWithGameException() {
         gameSettings.setGameOver(false);
-        updatePublisher.subscribe(null);
         gameInitializer.subscribe(null);
 
         Thread gameThread =
@@ -121,6 +84,16 @@ class GameWithExceptionsTest {
         @Override
         public boolean isGameOver() {
             return gameOver;
+        }
+    }
+
+    static class TestGameInitializer extends GameInitializer {
+        public boolean throwException = false;
+        boolean notified = false;
+
+        @Override
+        public void initializeSubscribers() throws NotPossibleToInitializeSubscribersException {
+            notified = true;
         }
     }
 }

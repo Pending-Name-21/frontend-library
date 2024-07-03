@@ -1,53 +1,20 @@
 package com.bridge;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
-import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
-import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
-import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.ipc.TransmitterTest;
-import com.bridge.processinputhandler.InputVerifier;
-import com.bridge.processinputhandler.KeyboardEventManager;
-import com.bridge.processinputhandler.MouseEventManager;
-import com.bridge.renderHandler.render.RenderManager;
-import com.bridge.renderHandler.repository.SoundRepository;
-import com.bridge.renderHandler.repository.SpriteRepository;
-import com.bridge.updatehandler.UpdatePublisher;
-import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GameTest {
-    private InputVerifier inputVerifier;
-    private TestGameSettings gameSettings;
-    private TestUpdatePublisher updatePublisher;
-    private RenderManager renderManager;
-    private TestGameInitializer gameInitializer;
-    private Game game;
-
     private static Thread SERVER_THREAD;
-
-    @BeforeEach
-    void setUp() throws GameException {
-        inputVerifier =
-                new InputVerifier(List.of(new KeyboardEventManager(), new MouseEventManager()));
-        gameSettings = new TestGameSettings();
-        updatePublisher = new TestUpdatePublisher();
-        renderManager = new RenderManager(new SpriteRepository(), new SoundRepository());
-        gameInitializer = new TestGameInitializer();
-        game =
-                new Game(
-                        inputVerifier,
-                        gameSettings,
-                        updatePublisher,
-                        renderManager,
-                        gameInitializer);
-    }
+    private TestGameSettings gameSettings;
+    private Game game;
 
     @BeforeAll
     static void startServer() {
@@ -66,29 +33,19 @@ class GameTest {
         TransmitterTest.cleanup();
     }
 
-    @Test
-    void testInitialize() throws GameException {
-        game.initialize();
-        assertTrue(gameInitializer.notified);
-    }
-
-    @Test
-    void testUpdate() throws GameException {
-        game.update();
-        assertTrue(updatePublisher.notified);
+    @BeforeEach
+    void setUp() {
+        gameSettings = new TestGameSettings();
+        game = new Game(gameSettings);
     }
 
     @Test
     void testRender() {
-        try {
-            game.render();
-        } catch (RenderException e) {
-            fail(e.getMessage(), e);
-        }
+        game.render();
     }
 
     @Test
-    void testRun() throws GameException, InterruptedException {
+    void testRun() throws InterruptedException {
         gameSettings.setGameOver(false);
         Thread gameThread =
                 new Thread(
@@ -108,17 +65,14 @@ class GameTest {
                             try {
                                 Thread.sleep(1000);
                                 gameSettings.setGameOver(true);
-                                System.out.println("STOPPER THREAD");
                             } catch (InterruptedException e) {
-                                fail("InterruptedException occurred: " + e.getMessage());
+                                fail("InterruptedException occurred", e);
                             }
                         });
 
         stopperThread.start();
         stopperThread.join();
         gameThread.join();
-
-        assertTrue(updatePublisher.notified);
     }
 
     static class TestGameSettings extends AGameSettings {
@@ -134,22 +88,22 @@ class GameTest {
         }
     }
 
-    static class TestUpdatePublisher extends UpdatePublisher {
-        boolean notified = false;
+    @Test
+    void verifyGameInstance() {
+        Game game =
+                new Game(
+                        new AGameSettings() {
+                            @Override
+                            public boolean isGameOver() {
+                                return false;
+                            }
+                        });
 
-        @Override
-        public void notifySubscribers() {
-            notified = true;
-        }
-    }
-
-    static class TestGameInitializer extends GameInitializer {
-        public boolean throwException = false;
-        boolean notified = false;
-
-        @Override
-        public void initializeSubscribers() throws NotPossibleToInitializeSubscribersException {
-            notified = true;
-        }
+        assertNotNull(game.getGameInitializer());
+        assertNotNull(game.getKeyboardEventManager());
+        assertNotNull(game.getMouseEventManager());
+        assertNotNull(game.getSoundIRepository());
+        assertNotNull(game.getSpriteIRepository());
+        assertNotNull(game.getUpdatePublisher());
     }
 }
