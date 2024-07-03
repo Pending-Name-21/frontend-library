@@ -52,11 +52,13 @@ jobs:
           fetch-depth: 1
 
       - name: Build with Gradle
-        run: ./gradlew assemble
+        run: |
+          ./gradlew ShadowJar
+          mv ./bridge/build/libs/bridge-0.0.0-alpha.0.2.0-all.jar ./bridge/build/libs/bridge-0.0.0-alpha.0.2.0.jar
 
       - name: Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: bridge-lib
-          path: "bridge/build/libs/bridge-*.jar"
+          path: "bridge/build/libs/bridge-0.0.0-alpha.0.2.0.jar"
           overwrite: true
