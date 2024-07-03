@@ -1,5 +1,6 @@
 package com.bridge.ipc;
 
+import CoffeeTime.Label.Label;
 import CoffeeTime.Output.Frame.*;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.google.flatbuffers.FlatBufferBuilder;
@@ -30,6 +31,31 @@ public class Transmitter {
      */
     public void send(com.bridge.renderHandler.render.Frame frame) throws RenderException {
         socketClient.send(handleFrame(frame));
+    }
+
+    public void sendLabel(String text, String color, int x, int y) throws RenderException {
+        socketClient.send(handleLabel(text, color, x, y));
+    }
+
+    private ByteBuffer handleLabel(String text, String color, int x, int y) throws RenderException {
+        FlatBufferBuilder builder = new FlatBufferBuilder(1024);
+
+        // Create the text and color strings
+        int textOffset = builder.createString(text);
+        int colorOffset = builder.createString(color);
+
+        // Create the position (Coord)
+        int coordOffset = Coord.createCoord(builder, x, y);
+
+        // Create the Label
+        int labelOffset = Label.createLabel(builder, textOffset, colorOffset, coordOffset);
+
+        // Finish the buffer
+        builder.finish(labelOffset);
+
+        // Get the ByteBuffer
+        ByteBuffer buf = builder.dataBuffer();
+        return buf;
     }
 
     private ByteBuffer handleFrame(com.bridge.renderHandler.render.Frame frame) {

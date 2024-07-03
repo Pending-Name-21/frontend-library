@@ -19,6 +19,22 @@ class SocketServerTest {
     public static final Path NAMESPACE =
             Path.of(System.getProperty("java.io.tmpdir"), "test-events-socket.sock");
 
+    @Test
+    public void runSocketServer() {
+        KeyboardEventManager keyboardEventManager = new KeyboardEventManager();
+        MouseEventManager mouseEventManager = new MouseEventManager();
+        Receiver receiver = new Receiver();
+        receiver.addBuffer(keyboardEventManager);
+        receiver.addBuffer(mouseEventManager);
+        AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+        Thread thread = startServer(receiver, atomicBoolean);
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Thread startServer(Receiver receiver, AtomicBoolean atomicBoolean) {
         try {
             Files.deleteIfExists(NAMESPACE);
