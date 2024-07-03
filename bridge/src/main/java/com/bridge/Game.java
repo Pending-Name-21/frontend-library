@@ -2,6 +2,7 @@ package com.bridge;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
+import com.bridge.core.handlers.LogHandler;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
 import com.bridge.ipc.Receiver;
@@ -14,9 +15,9 @@ import com.bridge.renderHandler.repository.IRepository;
 import com.bridge.renderHandler.sound.Sound;
 import com.bridge.renderHandler.sprite.Sprite;
 import com.bridge.updatehandler.UpdatePublisher;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 
 /**
  * Main game loop class.
@@ -33,14 +34,12 @@ public class Game {
     private final MouseEventManager mouseEventManager;
     private final SocketServer socketServer;
 
-
     /**
      * Constructs a Game with the specified input verifier.
      *
      * @param gameSettings the game settings to use
      */
-    public Game(
-            AGameSettings gameSettings) {
+    public Game(AGameSettings gameSettings) {
         this.gameSettings = gameSettings;
         this.updatePublisher = new UpdatePublisher();
         this.gameInitializer = new GameInitializer();
@@ -83,8 +82,12 @@ public class Game {
     /**
      * Renders sprites and plays sounds
      */
-    public void render() throws RenderException {
-        renderManager.render();
+    public void render() {
+        try {
+            renderManager.render();
+        } catch (RenderException e) {
+            LogHandler.log(Level.SEVERE, "Frames threshold has been reached", e);
+        }
     }
 
     /**

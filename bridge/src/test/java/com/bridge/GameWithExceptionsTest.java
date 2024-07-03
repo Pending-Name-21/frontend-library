@@ -4,17 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
-import com.bridge.core.exceptions.updatehandler.NotPossibleToNotifySubscribersException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
-import com.bridge.processinputhandler.InputVerifier;
-import com.bridge.processinputhandler.KeyboardEventManager;
-import com.bridge.processinputhandler.MouseEventManager;
-import com.bridge.renderHandler.render.RenderManager;
-import com.bridge.renderHandler.repository.SoundRepository;
-import com.bridge.renderHandler.repository.SpriteRepository;
-import com.bridge.updatehandler.UpdatePublisher;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

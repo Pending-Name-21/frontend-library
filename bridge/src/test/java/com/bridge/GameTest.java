@@ -1,16 +1,15 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.bridge.core.exceptions.GameException;
-import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.ipc.TransmitterTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class GameTest {
     private static Thread SERVER_THREAD;
@@ -40,14 +39,9 @@ class GameTest {
         game = new Game(gameSettings);
     }
 
-
     @Test
     void testRender() {
-        try {
-            game.render();
-        } catch (RenderException e) {
-            fail(e.getMessage(), e);
-        }
+        game.render();
     }
 
     @Test
@@ -95,13 +89,15 @@ class GameTest {
     }
 
     @Test
-    void verifyGameInstance(){
-        Game game = new Game(new AGameSettings() {
-            @Override
-            public boolean isGameOver() {
-                return false;
-            }
-        });
+    void verifyGameInstance() {
+        Game game =
+                new Game(
+                        new AGameSettings() {
+                            @Override
+                            public boolean isGameOver() {
+                                return false;
+                            }
+                        });
 
         assertNotNull(game.getGameInitializer());
         assertNotNull(game.getKeyboardEventManager());
