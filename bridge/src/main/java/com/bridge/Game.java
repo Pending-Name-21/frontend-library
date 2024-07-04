@@ -92,19 +92,6 @@ public class Game {
         }
     }
 
-    private void sleepFor(double seconds) {
-        long millis = (long) seconds * 1000;
-        int nanos = (int) ((seconds - (millis / 1000.0)) * 1_000_000_000);
-        try {
-            Thread.sleep(millis);
-            if (nanos > 0) {
-                LockSupport.parkNanos(nanos);
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
     /**
      * Runs the main game loop.
      */
