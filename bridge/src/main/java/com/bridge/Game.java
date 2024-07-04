@@ -17,7 +17,6 @@ import com.bridge.renderHandler.sprite.Sprite;
 import com.bridge.updatehandler.UpdatePublisher;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.LockSupport;
 import java.util.logging.Level;
 
 /**
