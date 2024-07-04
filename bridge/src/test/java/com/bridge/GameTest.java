@@ -10,6 +10,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 class GameTest {
     private static Thread SERVER_THREAD;
@@ -72,6 +74,35 @@ class GameTest {
 
         stopperThread.start();
         stopperThread.join();
+        gameThread.join();
+    }
+
+    @Test
+    public void testFramesCount() throws Exception {
+        Thread gameThread = new Thread(() -> {
+            try {
+                game.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        gameSettings.setGameOver(false);
+        gameThread.start();
+
+        Thread.sleep(1000);
+        double framesAfterOneSecond = game.getFramesCount();
+        assertEquals(60, framesAfterOneSecond, 2);
+
+        Thread.sleep(1000);
+        double framesAfterTwoSeconds = game.getFramesCount();
+        assertEquals(120, framesAfterTwoSeconds, 2);
+
+        Thread.sleep(8000);
+        double framesAfterTenSeconds = game.getFramesCount();
+        assertEquals(600, framesAfterTenSeconds, 2);
+
+        gameSettings.setGameOver(true);
+
         gameThread.join();
     }
 
