@@ -1,6 +1,7 @@
 package com.bridge.ipc;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
+import com.bridge.core.handlers.LogHandler;
 import com.bridge.renderHandler.render.RenderManager;
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
@@ -8,6 +9,7 @@ import java.net.UnixDomainSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  * This class provides a client-side connection for inter-process communication (IPC)
@@ -31,8 +33,10 @@ public class SocketClient {
             UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);
             channel.connect(socketAddress);
         } catch (IOException e) {
-            // TODO: handle error
-            e.printStackTrace();
+            LogHandler.log(
+                    Level.WARNING,
+                    String.format("Could not connect to %s, trying again", namespace),
+                    e);
         }
     }
 
@@ -50,8 +54,7 @@ public class SocketClient {
                     channel.write(buffer);
                     failedWriteAttempts = 0;
                 } catch (IOException e) {
-                    // TODO: handle error
-                    e.printStackTrace();
+                    LogHandler.log(Level.SEVERE, "Frame has been lost!!!", e);
                 }
             }
         } else {

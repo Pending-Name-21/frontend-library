@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
+import com.bridge.renderHandler.repository.SoundRepository;
+import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.renderHandler.sound.Sound;
 import com.bridge.renderHandler.sprite.Sprite;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,10 +13,14 @@ import org.junit.jupiter.api.Test;
 
 class SplashScreenTest {
     private SplashScreen splashScreen;
+    private SpriteRepository spriteRepository;
+    private SoundRepository soundRepository;
 
     @BeforeEach
     void setUp() throws NonExistentFilePathException {
-        splashScreen = new SplashScreen(0);
+        spriteRepository = new SpriteRepository();
+        soundRepository = new SoundRepository();
+        splashScreen = new SplashScreen(spriteRepository, soundRepository);
     }
 
     @Test
@@ -55,7 +61,7 @@ class SplashScreenTest {
         assertFalse(sprite.isHidden());
         assertFalse(sound.isPlaying());
 
-        splashScreen = new SplashScreen(299);
+        splashScreen.setFramesCount(299);
         splashScreen.notifySubscriber();
 
         assertFalse(sprite.isHidden());

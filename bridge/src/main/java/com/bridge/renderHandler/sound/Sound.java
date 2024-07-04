@@ -9,6 +9,11 @@ import java.nio.file.Path;
 public class Sound implements IFile {
     private boolean isPlaying;
     private final Path path;
+    private boolean canPlay;
+
+    public void setCanPlay(boolean canPlay) {
+        this.canPlay = canPlay;
+    }
 
     /**
      * Constructs a Sound with specified path.
@@ -18,6 +23,7 @@ public class Sound implements IFile {
     public Sound(Path path) {
         this.path = path;
         this.isPlaying = false;
+        this.canPlay = true;
     }
 
     /**
@@ -44,7 +50,7 @@ public class Sound implements IFile {
      * @return true if the sound is not currently playing, false otherwise.
      */
     public boolean canPlay() {
-        return !isPlaying;
+        return canPlay;
     }
 
     /**
