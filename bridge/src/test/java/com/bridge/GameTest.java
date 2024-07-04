@@ -102,23 +102,62 @@ class GameTest {
 
         gameThread.start();
 
+        /*Thread stopperThread =
+        new Thread(
+                () -> {
+                    try {
+                        Thread.sleep(1000);
+                        gameSettings.setGameOver(true);
+                        System.out.println("STOPPER THREAD");
+                    } catch (InterruptedException e) {
+                        fail("InterruptedException occurred: " + e.getMessage());
+                    }
+                });*/
+
+        //        stopperThread.start();
+        //        stopperThread.join();
+        gameThread.join();
+
+        assertTrue(updatePublisher.notified);
+    }
+
+    @Test
+    void testFramesCountIncrement() {
+        gameSettings.setGameOver(false);
+        int initialFramesCount = game.getFramesCount();
+
+        Thread gameThread =
+                new Thread(
+                        () -> {
+                            try {
+                                game.run();
+                            } catch (GameException e) {
+                                fail("GameException occurred: " + e.getMessage());
+                            }
+                        });
+
         Thread stopperThread =
                 new Thread(
                         () -> {
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(500);
                                 gameSettings.setGameOver(true);
-                                System.out.println("STOPPER THREAD");
                             } catch (InterruptedException e) {
                                 fail("InterruptedException occurred: " + e.getMessage());
                             }
                         });
 
+        gameThread.start();
         stopperThread.start();
-        stopperThread.join();
-        gameThread.join();
+        try {
+            stopperThread.join();
+            gameThread.join();
+        } catch (InterruptedException e) {
+            fail("Joining threads failed: " + e.getMessage());
+        }
 
-        assertTrue(updatePublisher.notified);
+        int finalFramesCount = game.getFramesCount();
+        assertTrue(finalFramesCount > initialFramesCount);
     }
 
     static class TestGameSettings extends AGameSettings {

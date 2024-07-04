@@ -38,19 +38,20 @@ public class Game {
             GameInitializer gameInitializer)
             throws GameException {
         splashScreen = new SplashScreen(framesCount);
-        updatePublisher.subscribe(splashScreen);
         this.inputVerifier = inputVerifier;
         this.gameSettings = gameSettings;
         this.updatePublisher = updatePublisher;
+        this.updatePublisher.subscribe(splashScreen);
         this.renderManager = renderManager;
         this.gameInitializer = gameInitializer;
+        this.gameInitializer.subscribe(splashScreen);
     }
 
     /**
      * Initializes game subscribers initializers.
      */
     public void initialize() throws GameException {
-        gameInitializer.subscribe(splashScreen);
+        splashScreen.init();
         gameInitializer.initializeSubscribers();
     }
 
@@ -66,6 +67,8 @@ public class Game {
      */
     public void update() throws GameException {
         updatePublisher.notifySubscribers();
+        splashScreen.notifySubscriber();
+        splashScreen.setFramesCount(framesCount);
     }
 
     /**
@@ -92,8 +95,13 @@ public class Game {
             processInput();
             update();
             render();
-            Thread.yield();
             framesCount++;
+            try {
+                Thread.sleep(15);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            Thread.yield();
         }
     }
 }

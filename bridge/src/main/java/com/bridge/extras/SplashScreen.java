@@ -24,6 +24,8 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
     private SoundRepository soundRepository;
     private SpriteRepository spriteRepository;
     private int framesCount;
+    private Transmitter transmitter;
+    private Frame frame;
 
     /**
      * Constructs a SplashScreen with the specified frame count.
@@ -37,11 +39,23 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
 
         spriteRepository = new SpriteRepository();
         SpriteBuilder spriteBuilder = new SpriteBuilder(spriteRepository);
-        this.sprite = spriteBuilder.buildPath("").assemble();
+        this.sprite =
+                spriteBuilder
+                        .buildPath(
+                                "/home/fundacion/Documents/Ing_soft_ware/Semestre V/Desarrollo"
+                                        + " V/frontend-library/bridge/resources/splash-show.jpg")
+                        .buildCoord(0, 0)
+                        .buildSize(1080, 1920)
+                        .assemble();
 
         soundRepository = new SoundRepository();
         SoundBuilder soundBuilder = new SoundBuilder(soundRepository);
-        this.sound = soundBuilder.buildPath("").assemble();
+        this.sound =
+                soundBuilder
+                        .buildPath(
+                                "/home/fundacion/Documents/Ing_soft_ware/Semestre V/Desarrollo"
+                                        + " V/frontend-library/bridge/resources/splash_sound.mp3")
+                        .assemble();
     }
 
     /**
@@ -50,9 +64,10 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
      *
      * @throws RenderException if there is an error during the rendering process
      */
-    public void startAnimation() throws RenderException {
-        Transmitter transmitter = new Transmitter(new SocketClient(SocketClient.NAMESPACE));
-        Frame frame = new Frame(spriteRepository.retrieve(), soundRepository.retrieve());
+    public void startAnimation() throws RenderException, InterruptedException {
+        transmitter = new Transmitter(new SocketClient(SocketClient.NAMESPACE));
+        System.out.println(spriteRepository.retrieve());
+        frame = new Frame(spriteRepository.retrieve(), soundRepository.retrieve());
         transmitter.send(frame);
     }
 
@@ -63,7 +78,7 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
     public void init() {
         try {
             startAnimation();
-        } catch (RenderException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -74,9 +89,28 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
      */
     @Override
     public void notifySubscriber() {
-        if (framesCount >= 300 && !sprite.isHidden() && !sound.isPlaying()) {
+        if (framesCount >= 300 && !sprite.isHidden()) {
             sprite.setHidden(true);
             sound.setPlaying(false);
+            try {
+                System.out.println(spriteRepository.retrieve());
+                frame = new Frame(spriteRepository.retrieve(), soundRepository.retrieve());
+                transmitter.send(frame);
+            } catch (RenderException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public Sound getSound() {
+        return sound;
+    }
+
+    public void setFramesCount(int framesCount) {
+        this.framesCount = framesCount;
     }
 }

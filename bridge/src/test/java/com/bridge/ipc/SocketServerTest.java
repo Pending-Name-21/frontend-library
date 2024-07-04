@@ -208,4 +208,20 @@ class SocketServerTest {
             fail("Failed to join server thread", e);
         }
     }
+
+    @Test
+    public void runSocketServer() {
+        KeyboardEventManager keyboardEventManager = new KeyboardEventManager();
+        MouseEventManager mouseEventManager = new MouseEventManager();
+        Receiver receiver = new Receiver();
+        receiver.addBuffer(keyboardEventManager);
+        receiver.addBuffer(mouseEventManager);
+        AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+        Thread thread = startServer(receiver, atomicBoolean);
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
