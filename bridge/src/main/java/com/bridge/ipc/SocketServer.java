@@ -43,26 +43,26 @@ public class SocketServer implements Runnable {
      */
     @Override
     public void run() {
+        flush();
         UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(namespace);
         try (ServerSocketChannel server = ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
             server.bind(socketAddress);
             listen(server);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LogHandler.log(Level.SEVERE, "Socket Server has been interrupted", e);
+            LogHandler.log(Level.WARNING, "Socket Server has been interrupted", e);
         } catch (ClosedChannelException e) {
-            LogHandler.log(Level.SEVERE, "Socket Server channel has been closed", e);
+            LogHandler.log(Level.WARNING, "Socket Server channel has been closed", e);
         } catch (IOException e) {
             LogHandler.log(Level.SEVERE, "Unexpected exception", e);
-        } finally {
-            flush();
+            Thread.currentThread().interrupt();
         }
     }
 
     /**
      * Cleans up the UNIX domain socket namespace by deleting the namespace file.
      */
-    private void flush() {
+    public void flush() {
         try {
             Files.deleteIfExists(namespace);
             LogHandler.log(Level.INFO, String.format("Deleted namespace %s", namespace));

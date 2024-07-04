@@ -20,22 +20,13 @@ class SocketServerTest {
             Path.of(System.getProperty("java.io.tmpdir"), "test-events-socket.sock");
 
     public static Thread startServer(Receiver receiver, AtomicBoolean atomicBoolean) {
-        try {
-            Files.deleteIfExists(NAMESPACE);
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Failed to delete existing namespace file: " + e.getMessage());
-        }
         SocketServer socketServer = new SocketServer(receiver, NAMESPACE, atomicBoolean);
         Thread thread = new Thread(socketServer);
         thread.start();
-        while (!Files.exists(NAMESPACE)) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                thread.interrupt();
-                fail("Test interrupted while waiting for server to initialize", e);
-            }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            fail(e.getMessage(), e.getCause());
         }
         return thread;
     }
@@ -45,9 +36,8 @@ class SocketServerTest {
             UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(NAMESPACE);
             channel.connect(socketAddress);
             channel.write(buffer);
-            channel.close();
         } catch (IOException e) {
-            fail("IOException occurred", e);
+            fail(e.getMessage(), e);
         }
     }
 
@@ -107,7 +97,7 @@ class SocketServerTest {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    fail(e.getMessage(), e.getCause());
                 }
             }
         }
@@ -197,12 +187,17 @@ class SocketServerTest {
     @Test
     void verifyServerCleansNamespace() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(true);
-        Thread thread = SocketServerTest.startServer(new Receiver(), atomicBoolean);
-
-        atomicBoolean.set(false);
+        SocketServer socketServer = new SocketServer(new Receiver(), NAMESPACE, atomicBoolean);
+        Thread thread = new Thread(socketServer);
+        thread.start();
+        thread.interrupt();
         try {
-            thread.interrupt();
-            thread.join();
+            thread.join(1000);
+            if (thread.isAlive()) {
+                fail("Socket server did not exited gracefully");
+            }
+            socketServer.flush();
+
             assertFalse(Files.exists(NAMESPACE));
         } catch (InterruptedException e) {
             fail("Failed to join server thread", e);
