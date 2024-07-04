@@ -116,7 +116,7 @@ public class Game {
             render();
             Thread.yield();
 
-            framesCount+=7.5;
+            framesCount += 7.5;
 
             try {
                 Thread.sleep(125);
@@ -126,7 +126,6 @@ public class Game {
         }
         atomicBoolean.set(false);
     }
-
 
     public KeyboardEventManager getKeyboardEventManager() {
         return keyboardEventManager;

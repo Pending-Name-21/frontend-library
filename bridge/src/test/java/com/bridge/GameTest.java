@@ -1,5 +1,6 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -10,8 +11,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 
 class GameTest {
     private static Thread SERVER_THREAD;
@@ -79,13 +78,15 @@ class GameTest {
 
     @Test
     public void testFramesCount() throws Exception {
-        Thread gameThread = new Thread(() -> {
-            try {
-                game.run();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        Thread gameThread =
+                new Thread(
+                        () -> {
+                            try {
+                                game.run();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
         gameSettings.setGameOver(false);
         gameThread.start();
 
