@@ -1,5 +1,6 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -72,6 +73,37 @@ class GameTest {
 
         stopperThread.start();
         stopperThread.join();
+        gameThread.join();
+    }
+
+    @Test
+    public void testFramesCount() throws Exception {
+        Thread gameThread =
+                new Thread(
+                        () -> {
+                            try {
+                                game.run();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+        gameSettings.setGameOver(false);
+        gameThread.start();
+
+        Thread.sleep(1000);
+        double framesAfterOneSecond = game.getFramesCount();
+        assertEquals(60, framesAfterOneSecond, 2);
+
+        Thread.sleep(1000);
+        double framesAfterTwoSeconds = game.getFramesCount();
+        assertEquals(120, framesAfterTwoSeconds, 2);
+
+        Thread.sleep(8000);
+        double framesAfterTenSeconds = game.getFramesCount();
+        assertEquals(600, framesAfterTenSeconds, 2);
+
+        gameSettings.setGameOver(true);
+
         gameThread.join();
     }
 

@@ -33,6 +33,7 @@ public class Game {
     private final KeyboardEventManager keyboardEventManager;
     private final MouseEventManager mouseEventManager;
     private final SocketServer socketServer;
+    private double framesCount;
 
     /**
      * Constructs a Game with the specified input verifier.
@@ -100,6 +101,14 @@ public class Game {
             update();
             render();
             Thread.yield();
+
+            framesCount += 7.5;
+
+            try {
+                Thread.sleep(125);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         atomicBoolean.set(false);
     }
@@ -126,5 +135,13 @@ public class Game {
 
     public GameInitializer getGameInitializer() {
         return gameInitializer;
+    }
+
+    /**
+     * Gets the current frames count since game was run
+     * @return the frames count
+     */
+    public double getFramesCount() {
+        return framesCount;
     }
 }
