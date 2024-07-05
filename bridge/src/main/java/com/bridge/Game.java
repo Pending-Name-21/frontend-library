@@ -66,13 +66,15 @@ public class Game {
         threadSocketServer = new Thread(socketServer);
         isServerRunning.set(true);
         threadSocketServer.start();
+
+        renderManager.init();
         gameInitializer.initializeSubscribers();
     }
 
     /**
      * Processes input by calling the check method on the input verifier.
      */
-    private void processInput() throws GameException {
+    private void processInput() {
         inputVerifier.check();
     }
 
@@ -90,7 +92,7 @@ public class Game {
         try {
             renderManager.render();
         } catch (RenderException e) {
-            LogHandler.log(Level.SEVERE, "Frames threshold has been reached", e);
+            LogHandler.log(Level.SEVERE, "Exception detected while attempting to render", e);
         }
     }
 

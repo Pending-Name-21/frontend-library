@@ -1,6 +1,7 @@
 package com.bridge.ipc;
 
 import CoffeeTime.Output.Frame.*;
+import com.bridge.core.exceptions.ipc.SocketClientException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.google.flatbuffers.FlatBufferBuilder;
 import java.nio.ByteBuffer;
@@ -28,7 +29,8 @@ public class Transmitter {
      *
      * @param frame The rendering frame object containing sprites and sounds to transmit.
      */
-    public void send(com.bridge.renderHandler.render.Frame frame) throws RenderException {
+    public void send(com.bridge.renderHandler.render.Frame frame)
+            throws RenderException, SocketClientException {
         socketClient.send(handleFrame(frame));
     }
 
