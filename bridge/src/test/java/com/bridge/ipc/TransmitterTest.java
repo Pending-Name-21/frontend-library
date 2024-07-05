@@ -1,20 +1,16 @@
 package com.bridge.ipc;
 
+import static com.bridge.SocketServerMock.cleanup;
+import static com.bridge.SocketServerMock.makeServerThread;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.bridge.SocketServerMock;
 import com.bridge.renderHandler.render.Frame;
 import com.bridge.renderHandler.sound.Sound;
 import com.bridge.renderHandler.sprite.Coord;
 import com.bridge.renderHandler.sprite.Size;
 import com.bridge.renderHandler.sprite.Sprite;
-import java.io.IOException;
-import java.net.StandardProtocolFamily;
-import java.net.UnixDomainSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,48 +20,13 @@ import org.junit.jupiter.api.Test;
 
 public class TransmitterTest {
     private static Thread SERVER_THREAD;
-    public static final Path NAMESPACE =
-            Path.of(System.getProperty("java.io.tmpdir"), "test_socket_console");
-
-    public static Thread startServer() {
-        return new Thread(
-                () -> {
-                    UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(NAMESPACE);
-                    try (ServerSocketChannel server =
-                            ServerSocketChannel.open(StandardProtocolFamily.UNIX)) {
-                        server.bind(socketAddress);
-                        ByteBuffer buffer = ByteBuffer.allocate(1024);
-                        while (!Thread.currentThread().isInterrupted()) {
-                            try (SocketChannel client = server.accept()) {
-                                client.read(buffer);
-                                buffer.clear();
-                            } catch (IOException e) {
-                                if (Thread.currentThread().isInterrupted()) {
-                                    break;
-                                }
-                                fail("Server failed to accept connection", e);
-                            }
-                        }
-                    } catch (IOException e) {
-                        fail("Server failed to start", e);
-                    }
-                });
-    }
-
-    public static void cleanup() {
-        try {
-            Files.deleteIfExists(NAMESPACE);
-        } catch (IOException e) {
-            fail("Failed to delete namespace file", e);
-        }
-    }
 
     @BeforeAll
     static void initServer() {
-        cleanup();
-        SERVER_THREAD = startServer();
+        cleanup(SocketServerMock.NAMESPACE);
+        SERVER_THREAD = makeServerThread(SocketServerMock.NAMESPACE);
         SERVER_THREAD.start();
-        while (!Files.exists(NAMESPACE)) {
+        while (!Files.exists(SocketServerMock.NAMESPACE)) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -82,17 +43,17 @@ public class TransmitterTest {
         } catch (InterruptedException e) {
             fail("Failed to join server thread", e);
         }
-        cleanup();
+        cleanup(SocketServerMock.NAMESPACE);
     }
 
     private static void sendFrame(List<Sprite> sprites, List<Sound> sounds) {
         try {
-            SocketClient socketClient = new SocketClient(NAMESPACE);
+            SocketClient socketClient = new SocketClient(SocketServerMock.NAMESPACE);
             Transmitter transmitter = new Transmitter(socketClient);
             Frame frame = new Frame(sprites, sounds);
             transmitter.send(frame);
         } catch (Exception e) {
-            fail("Exception occurred", e);
+            fail(e);
         }
     }
 

@@ -6,6 +6,9 @@ import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.initializerhandler.NotPossibleToInitializeSubscribersException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.initializerhandler.GameInitializer;
+import com.bridge.ipc.SocketClient;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +16,31 @@ class GameWithExceptionsTest {
     private TestGameSettings gameSettings;
     private Game game;
     private TestGameInitializer gameInitializer;
+    private static Thread SERVER_THREAD;
+
+    @BeforeAll
+    static void startServer() {
+        SocketServerMock.cleanup(SocketClient.NAMESPACE);
+        SERVER_THREAD = SocketServerMock.makeServerThread(SocketClient.NAMESPACE);
+        SERVER_THREAD.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail(e);
+        }
+    }
+
+    @AfterAll
+    static void stopServer() {
+        SERVER_THREAD.interrupt();
+        try {
+            SERVER_THREAD.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail("Failed to join server thread");
+        }
+        SocketServerMock.cleanup(SocketClient.NAMESPACE);
+    }
 
     @BeforeEach
     void setUp() throws GameException {

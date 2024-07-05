@@ -1,12 +1,12 @@
 package com.bridge;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.gamesettings.AGameSettings;
-import com.bridge.ipc.TransmitterTest;
+import com.bridge.ipc.SocketClient;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,14 @@ class GameTest {
 
     @BeforeAll
     static void startServer() {
-        SERVER_THREAD = TransmitterTest.startServer();
+        SocketServerMock.cleanup(SocketClient.NAMESPACE);
+        SERVER_THREAD = SocketServerMock.makeServerThread(SocketClient.NAMESPACE);
+        SERVER_THREAD.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail(e);
+        }
     }
 
     @AfterAll
@@ -31,7 +38,7 @@ class GameTest {
             e.printStackTrace();
             fail("Failed to join server thread");
         }
-        TransmitterTest.cleanup();
+        SocketServerMock.cleanup(SocketClient.NAMESPACE);
     }
 
     @BeforeEach
@@ -78,6 +85,10 @@ class GameTest {
 
     @Test
     public void testFramesCount() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        game.getGameInitializer().subscribe(latch::countDown);
+
         Thread gameThread =
                 new Thread(
                         () -> {
@@ -87,8 +98,14 @@ class GameTest {
                                 e.printStackTrace();
                             }
                         });
+
         gameSettings.setGameOver(false);
         gameThread.start();
+
+        // Wait for the game to initialize
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            throw new AssertionError("Game initialization timed out");
+        }
 
         Thread.sleep(1000);
         double framesAfterOneSecond = game.getFramesCount();
@@ -103,8 +120,17 @@ class GameTest {
         assertEquals(600, framesAfterTenSeconds, 2);
 
         gameSettings.setGameOver(true);
-
         gameThread.join();
+    }
+
+    @Test
+    void verifyGameInstance() {
+        assertNotNull(game.getGameInitializer());
+        assertNotNull(game.getKeyboardEventManager());
+        assertNotNull(game.getMouseEventManager());
+        assertNotNull(game.getSoundIRepository());
+        assertNotNull(game.getSpriteIRepository());
+        assertNotNull(game.getUpdatePublisher());
     }
 
     static class TestGameSettings extends AGameSettings {
@@ -118,24 +144,5 @@ class GameTest {
         public void setGameOver(boolean gameOver) {
             this.gameOver = gameOver;
         }
-    }
-
-    @Test
-    void verifyGameInstance() {
-        Game game =
-                new Game(
-                        new AGameSettings() {
-                            @Override
-                            public boolean isGameOver() {
-                                return false;
-                            }
-                        });
-
-        assertNotNull(game.getGameInitializer());
-        assertNotNull(game.getKeyboardEventManager());
-        assertNotNull(game.getMouseEventManager());
-        assertNotNull(game.getSoundIRepository());
-        assertNotNull(game.getSpriteIRepository());
-        assertNotNull(game.getUpdatePublisher());
     }
 }
