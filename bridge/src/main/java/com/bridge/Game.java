@@ -30,7 +30,7 @@ public class Game {
     private final RenderManager renderManager;
     private final GameInitializer gameInitializer;
 
-    private final AtomicBoolean atomicBoolean;
+    private final AtomicBoolean isServerRunning;
     private final KeyboardEventManager keyboardEventManager;
     private final MouseEventManager mouseEventManager;
     private final SocketServer socketServer;
@@ -47,13 +47,13 @@ public class Game {
         this.updatePublisher = new UpdatePublisher();
         this.gameInitializer = new GameInitializer();
 
-        atomicBoolean = new AtomicBoolean();
+        isServerRunning = new AtomicBoolean();
         keyboardEventManager = new KeyboardEventManager();
         mouseEventManager = new MouseEventManager();
         Receiver receiver = new Receiver();
         receiver.addBuffer(keyboardEventManager);
         receiver.addBuffer(mouseEventManager);
-        socketServer = new SocketServer(new Receiver(), SocketServer.NAMESPACE, atomicBoolean);
+        socketServer = new SocketServer(new Receiver(), SocketServer.NAMESPACE, isServerRunning);
 
         inputVerifier = new InputVerifier(List.of(keyboardEventManager, mouseEventManager));
         renderManager = new RenderManager();
@@ -64,6 +64,7 @@ public class Game {
      */
     public void initialize() throws GameException {
         threadSocketServer = new Thread(socketServer);
+        isServerRunning.set(true);
         threadSocketServer.start();
         gameInitializer.initializeSubscribers();
     }
@@ -112,7 +113,8 @@ public class Game {
                 throw new RuntimeException(e);
             }
         }
-        atomicBoolean.set(false);
+
+        isServerRunning.set(false);
         try {
             threadSocketServer.join(1000);
             if (threadSocketServer.isAlive()) {
