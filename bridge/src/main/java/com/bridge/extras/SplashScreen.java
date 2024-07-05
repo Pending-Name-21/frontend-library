@@ -1,12 +1,7 @@
 package com.bridge.extras;
 
-import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
-import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
-import com.bridge.initializerhandler.IIinitializerSubscriber;
-import com.bridge.ipc.Transmitter;
 import com.bridge.renderHandler.builders.SoundBuilder;
 import com.bridge.renderHandler.builders.SpriteBuilder;
-import com.bridge.renderHandler.render.Frame;
 import com.bridge.renderHandler.repository.IRepository;
 import com.bridge.renderHandler.sound.Sound;
 import com.bridge.renderHandler.sprite.Sprite;
@@ -16,69 +11,42 @@ import com.bridge.updatehandler.IUpdateSubscriber;
  * SplashScreen class that initializes and starts an animation
  * with a sprite and sound, and updates its state based on frame count.
  */
-public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber {
+public class SplashScreen implements IUpdateSubscriber {
     private Sprite sprite;
     private Sound sound;
-    private IRepository<Sound> soundRepository;
-    private IRepository<Sprite> spriteRepository;
-    private int framesCount;
-    private Transmitter transmitter;
-    private Frame frame;
+    private final IRepository<Sound> soundRepository;
+    private final IRepository<Sprite> spriteRepository;
+    private double framesCount;
 
     /**
      * Constructs a SplashScreen with the specified frame count.
      * Initializes sprite and sound using their respective repositories and builders.
      *
-     * @throws NonExistentFilePathException if the file path for sprite or sound is invalid
      */
-    public SplashScreen(IRepository<Sprite> spriteRepository, IRepository<Sound> soundRepository) throws NonExistentFilePathException {
+    public SplashScreen(
+            IRepository<Sprite> spriteRepository,
+            IRepository<Sound> soundRepository,
+            double framesCount) {
+        this.framesCount = framesCount;
         this.spriteRepository = spriteRepository;
-        SpriteBuilder spriteBuilder = new SpriteBuilder(spriteRepository);
-
-        this.sprite =
-                spriteBuilder
-                        /**.buildPath(
-                                "/home/fundacion/Documents/Ing_soft_ware/Semestre V/Desarrollo"
-                                        + " V/frontend-library/bridge/resources/splash-show.jpg")**/
-                        .buildPath(
-                                "splash-show.jpg")
-                        .buildCoord(0, 0)
-                        .buildSize(800, 600)
-                        .assemble();
-
         this.soundRepository = soundRepository;
-        SoundBuilder soundBuilder = new SoundBuilder(soundRepository);
-        this.sound =
-                soundBuilder
-                        .buildPath(
-                                "/home/fundacion/Documents/Ing_soft_ware/Semestre V/Desarrollo"
-                                        + " V/frontend-library/bridge/resources/splash_sound.mp3")
-                        .assemble();
     }
 
     /**
      * Starts the animation by sending a frame containing the sprite and sound data
      * through a transmitter.
-     *
-     * @throws RenderException if there is an error during the rendering process
      */
-    public void startAnimation() throws RenderException, InterruptedException {
-        /*transmitter = new Transmitter(new SocketClient(SocketClient.NAMESPACE));
-        System.out.println(spriteRepository.retrieve());
-        frame = new Frame(spriteRepository.retrieve(), soundRepository.retrieve());
-        transmitter.send(frame);*/
-    }
-
-    /**
-     * Initializes the splash screen animation by calling startAnimation.
-     */
-    @Override
-    public void init() {
-        try {
-            startAnimation();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void startAnimation() {
+        SpriteBuilder spriteBuilder = new SpriteBuilder(spriteRepository);
+        this.sprite =
+                spriteBuilder
+                        .buildPathFromScreenFiles("assets/images/splash_image.jpg")
+                        .buildCoord(0, 0)
+                        .buildSize(800, 600)
+                        .assemble();
+        SoundBuilder soundBuilder = new SoundBuilder(soundRepository);
+        this.sound =
+                soundBuilder.buildPathFromScreenFiles("assets/sounds/splash_sound.mp3").assemble();
     }
 
     /**
@@ -91,22 +59,6 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
             sprite.setHidden(true);
             sound.setPlaying(false);
             sound.setCanPlay(false);
-            spriteRepository.delete(sprite);
-            soundRepository.delete(sound);
-            SpriteBuilder spriteBuilder = new SpriteBuilder(spriteRepository);
-            try {
-                this.sprite =
-                        spriteBuilder
-                                .buildPath(
-                                        "/home/fundacion/Documents/Ing_soft_ware/Semestre V/Desarrollo"
-                                                + " V/frontend-library/bridge/resources/splash-hidden.png")
-                                .buildCoord(0, 0)
-                                .buildSize(800, 600)
-                                .assemble();
-            } catch (NonExistentFilePathException e) {
-                throw new RuntimeException(e);
-            }
-
         }
     }
 
@@ -118,7 +70,7 @@ public class SplashScreen implements IIinitializerSubscriber, IUpdateSubscriber 
         return sound;
     }
 
-    public void setFramesCount(int framesCount) {
+    public void setFramesCount(double framesCount) {
         this.framesCount = framesCount;
     }
 }

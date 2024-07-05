@@ -5,6 +5,7 @@ import com.bridge.renderHandler.file.FileHandler;
 import com.bridge.renderHandler.repository.IRepository;
 import com.bridge.renderHandler.sound.Sound;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Builder class for creating Sound objects.
@@ -32,6 +33,18 @@ public class SoundBuilder {
      */
     public SoundBuilder buildPath(String filePath) throws NonExistentFilePathException {
         this.filePath = fileHandler.getFilePath(filePath);
+        return this;
+    }
+
+    /**
+     * Sets the file path for the Sound file from the screen files
+     * without validating non-existing files
+     *
+     * @param filePath the file path.
+     * @return the current instance of SoundBuilder.
+     */
+    public SoundBuilder buildPathFromScreenFiles(String filePath) {
+        this.filePath = Paths.get(filePath);
         return this;
     }
 

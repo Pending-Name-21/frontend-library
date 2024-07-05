@@ -7,6 +7,7 @@ import com.bridge.renderHandler.sprite.Coord;
 import com.bridge.renderHandler.sprite.Size;
 import com.bridge.renderHandler.sprite.Sprite;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Builder class for creating Sprite objects.
@@ -60,6 +61,18 @@ public class SpriteBuilder {
      */
     public SpriteBuilder buildPath(String filePath) throws NonExistentFilePathException {
         this.filePath = fileHandler.getFilePath(filePath);
+        return this;
+    }
+
+    /**
+     * Sets the file path for the Sprite image from the screen files
+     * without validating non-existing files
+     *
+     * @param filePath the file path.
+     * @return the current instance of SpriteBuilder.
+     */
+    public SpriteBuilder buildPathFromScreenFiles(String filePath) {
+        this.filePath = Paths.get(filePath);
         return this;
     }
 

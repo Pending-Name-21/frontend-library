@@ -1,11 +1,11 @@
 package com.bridge;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.bridge.core.exceptions.GameException;
 import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
-import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.gamesettings.AGameSettings;
 import com.bridge.ipc.TransmitterTest;
 import org.junit.jupiter.api.AfterAll;
@@ -42,7 +42,7 @@ class GameTest {
     }
 
     @Test
-    void testRender() throws RenderException {
+    void testRender() {
         game.render();
     }
 
@@ -60,8 +60,7 @@ class GameTest {
 
                         });
 
-        gameThread.start();*/
-/*
+        gameThread.start();
         Thread stopperThread =
                 new Thread(
                         () -> {
@@ -71,11 +70,42 @@ class GameTest {
                             } catch (InterruptedException e) {
                                 fail("InterruptedException occurred", e);
                             }
-                        });*/
+                        });
 
-//        stopperThread.start();
-//        stopperThread.join();
-//        gameThread.join();
+        stopperThread.start();
+        stopperThread.join();
+        gameThread.join();*/
+    }
+
+    @Test
+    public void testFramesCount() throws Exception {
+        Thread gameThread =
+                new Thread(
+                        () -> {
+                            try {
+                                game.run();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+        gameSettings.setGameOver(false);
+        gameThread.start();
+
+        Thread.sleep(1000);
+        double framesAfterOneSecond = game.getFramesCount();
+        assertEquals(60, framesAfterOneSecond, 2);
+
+        Thread.sleep(1000);
+        double framesAfterTwoSeconds = game.getFramesCount();
+        assertEquals(120, framesAfterTwoSeconds, 2);
+
+        Thread.sleep(8000);
+        double framesAfterTenSeconds = game.getFramesCount();
+        assertEquals(600, framesAfterTenSeconds, 2);
+
+        gameSettings.setGameOver(true);
+
+        gameThread.join();
     }
 
     static class TestGameSettings extends AGameSettings {

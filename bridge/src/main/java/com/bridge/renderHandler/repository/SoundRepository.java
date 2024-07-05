@@ -24,11 +24,6 @@ public class SoundRepository implements IRepository<Sound> {
         sounds.add(sound);
     }
 
-    @Override
-    public void delete(Sound sound) {
-        sounds.remove(sound);
-    }
-
     /**
      * Retrieves only playable sounds from the repository.
      *

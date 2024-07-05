@@ -1,7 +1,6 @@
 package com.bridge;
 
 import com.bridge.core.exceptions.GameException;
-import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.core.handlers.LogHandler;
 import com.bridge.extras.SplashScreen;
@@ -36,14 +35,14 @@ public class Game {
     private final KeyboardEventManager keyboardEventManager;
     private final MouseEventManager mouseEventManager;
     private final SocketServer socketServer;
-    private int framesCount;
+    private double framesCount;
 
     /**
      * Constructs a Game with the specified input verifier.
      *
      * @param gameSettings the game settings to use
      */
-    public Game(AGameSettings gameSettings) throws NonExistentFilePathException {
+    public Game(AGameSettings gameSettings) {
         this.gameSettings = gameSettings;
         this.updatePublisher = new UpdatePublisher();
         this.gameInitializer = new GameInitializer();
@@ -58,8 +57,11 @@ public class Game {
 
         inputVerifier = new InputVerifier(List.of(keyboardEventManager, mouseEventManager));
         renderManager = new RenderManager();
-        splashScreen = new SplashScreen(getSpriteIRepository(), getSoundIRepository());
-        gameInitializer.subscribe(splashScreen);
+        splashScreen =
+                new SplashScreen(
+                        renderManager.getSpriteIRepository(),
+                        renderManager.getSoundIRepository(),
+                        framesCount);
         updatePublisher.subscribe(splashScreen);
     }
 
@@ -69,13 +71,14 @@ public class Game {
     public void initialize() throws GameException {
         Thread thread = new Thread(socketServer);
         thread.start();
+        splashScreen.startAnimation();
         gameInitializer.initializeSubscribers();
     }
 
     /**
      * Processes input by calling the check method on the input verifier.
      */
-    private void processInput() throws GameException {
+    private void processInput() {
         inputVerifier.check();
     }
 
@@ -83,6 +86,7 @@ public class Game {
      * Updates the game state and notifies subscribers.
      */
     public void update() throws GameException {
+        splashScreen.setFramesCount(framesCount);
         updatePublisher.notifySubscribers();
     }
 
@@ -106,13 +110,15 @@ public class Game {
             processInput();
             update();
             render();
-            framesCount++;
+            Thread.yield();
+
+            framesCount += 7.5;
+
             try {
-                Thread.sleep(15);
+                Thread.sleep(125);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            Thread.yield();
         }
         atomicBoolean.set(false);
     }
@@ -139,5 +145,13 @@ public class Game {
 
     public GameInitializer getGameInitializer() {
         return gameInitializer;
+    }
+
+    /**
+     * Gets the current frames count since game was run
+     * @return the frames count
+     */
+    public double getFramesCount() {
+        return framesCount;
     }
 }

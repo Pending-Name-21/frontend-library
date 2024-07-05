@@ -2,8 +2,6 @@ package com.bridge.extras;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.bridge.core.exceptions.renderHandlerExceptions.NonExistentFilePathException;
-import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.renderHandler.repository.SoundRepository;
 import com.bridge.renderHandler.repository.SpriteRepository;
 import com.bridge.renderHandler.sound.Sound;
@@ -17,44 +15,42 @@ class SplashScreenTest {
     private SoundRepository soundRepository;
 
     @BeforeEach
-    void setUp() throws NonExistentFilePathException {
+    void setUp() {
         spriteRepository = new SpriteRepository();
         soundRepository = new SoundRepository();
-        splashScreen = new SplashScreen(spriteRepository, soundRepository);
+        splashScreen = new SplashScreen(spriteRepository, soundRepository, 0);
     }
 
     @Test
     void testConstructor() {
         assertNotNull(splashScreen);
+        splashScreen.startAnimation();
         assertNotNull(splashScreen.getSprite());
         assertNotNull(splashScreen.getSound());
     }
 
     @Test
     void testStartAnimation() {
-        try {
-            splashScreen.startAnimation();
-        } catch (RenderException e) {
-            fail("RenderException was thrown during startAnimation: " + e.getMessage());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        splashScreen.startAnimation();
     }
 
     @Test
-    void testNotifySubscriber() throws NonExistentFilePathException {
-        //        assertFalse(splashScreen.getSprite().isHidden());
-        //        assertFalse(splashScreen.getSound().isPlaying());
-        //
-        //        splashScreen = new SplashScreen(301);
-        //        splashScreen.notifySubscriber();
-        //
-        //        assertTrue(splashScreen.getSprite().isHidden());
-        //        assertFalse(splashScreen.getSound().isPlaying());
+    void testNotifySubscriber() {
+        splashScreen.startAnimation();
+        assertFalse(splashScreen.getSprite().isHidden());
+        assertFalse(splashScreen.getSound().isPlaying());
+
+        splashScreen.setFramesCount(301);
+        splashScreen.notifySubscriber();
+
+        assertTrue(splashScreen.getSprite().isHidden());
+        assertFalse(splashScreen.getSound().isPlaying());
     }
 
     @Test
-    void testNotifySubscriberBeforeThreshold() throws NonExistentFilePathException {
+    void testNotifySubscriberBeforeThreshold() {
+        splashScreen.startAnimation();
+
         Sprite sprite = splashScreen.getSprite();
         Sound sound = splashScreen.getSound();
 

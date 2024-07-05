@@ -25,11 +25,6 @@ public class SpriteRepository implements IRepository<Sprite> {
         sprites.add(sprite);
     }
 
-    @Override
-    public void delete(Sprite sprite) {
-        sprites.remove(sprite);
-    }
-
     /**
      * Retrieves only visible sprites from the repository.
      *

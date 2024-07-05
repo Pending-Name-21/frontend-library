@@ -16,8 +16,6 @@ public interface IRepository<T> {
      */
     void add(T item);
 
-    void delete(T item);
-
     /**
      * Retrieves all items from the repository.
      *

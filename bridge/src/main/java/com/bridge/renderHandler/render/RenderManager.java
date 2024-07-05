@@ -25,7 +25,6 @@ public class RenderManager {
         transmitter = new Transmitter(new SocketClient(SocketClient.NAMESPACE));
         soundIRepository = new SoundRepository();
         spriteIRepository = new SpriteRepository();
-        System.out.println(spriteIRepository);
     }
 
     /**
