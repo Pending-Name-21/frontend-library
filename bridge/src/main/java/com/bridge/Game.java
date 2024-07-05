@@ -1,6 +1,7 @@
 package com.bridge;
 
 import com.bridge.core.exceptions.GameException;
+import com.bridge.core.exceptions.SocketServerException;
 import com.bridge.core.exceptions.renderHandlerExceptions.RenderException;
 import com.bridge.core.handlers.LogHandler;
 import com.bridge.gamesettings.AGameSettings;
@@ -34,6 +35,7 @@ public class Game {
     private final MouseEventManager mouseEventManager;
     private final SocketServer socketServer;
     private double framesCount;
+    private Thread threadSocketServer;
 
     /**
      * Constructs a Game with the specified input verifier.
@@ -61,8 +63,8 @@ public class Game {
      * Initializes game subscribers initializers.
      */
     public void initialize() throws GameException {
-        Thread thread = new Thread(socketServer);
-        thread.start();
+        threadSocketServer = new Thread(socketServer);
+        threadSocketServer.start();
         gameInitializer.initializeSubscribers();
     }
 
@@ -111,6 +113,16 @@ public class Game {
             }
         }
         atomicBoolean.set(false);
+        try {
+            threadSocketServer.join(1000);
+            if (threadSocketServer.isAlive()) {
+                LogHandler.log(Level.WARNING, "Socket did not exit gracefully, interrupting");
+                threadSocketServer.interrupt();
+            }
+            socketServer.flush();
+        } catch (InterruptedException e) {
+            throw new SocketServerException("Failed to stop socket server", e);
+        }
     }
 
     public KeyboardEventManager getKeyboardEventManager() {
