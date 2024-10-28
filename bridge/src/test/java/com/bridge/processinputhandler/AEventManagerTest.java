@@ -2,6 +2,7 @@ package com.bridge.processinputhandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import CoffeeTime.InputEvents.Event;
 import CoffeeTime.InputEvents.Keyboard;
@@ -21,7 +22,9 @@ class AEventManagerTest {
                     }
 
                     @Override
-                    public void publish() {}
+                    public void publish() {
+                        assertTrue(true);
+                    }
 
                     @Override
                     public void subscribe(IEventSubscriber<Keyboard> subscriber) {
