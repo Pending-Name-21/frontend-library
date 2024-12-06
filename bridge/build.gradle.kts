@@ -26,6 +26,10 @@ java {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    // testLogging {
+    //     showStandardStreams = true
+    // }
+    jvmArgs = listOf("-javaagent:../argos-instrumenter.jar=com/bridge")
 }
 
 spotless {
@@ -37,7 +41,7 @@ spotless {
   }
 }
 
-version = "0.0.0-alpha.0.2.0"
+version = "0.0.0-alpha.1.2.0"
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
